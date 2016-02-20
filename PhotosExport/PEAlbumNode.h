@@ -20,7 +20,7 @@ typedef NS_ENUM(NSUInteger, PEAlbumType)
 @interface PEAlbumNode : NSObject
 
 @property (weak, nonatomic) PEAlbumNode* parent;
-@property (strong, nonatomic) NSArray<PEAlbumNode*>* children;
+@property (strong, nonatomic) NSMutableArray<PEAlbumNode*>* children;
 @property (assign, nonatomic) PEAlbumType albumType;
 @property (copy, nonatomic) NSString* name;
 @property (copy, nonatomic) NSString* uniqueId;

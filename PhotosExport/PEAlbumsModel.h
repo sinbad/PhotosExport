@@ -18,7 +18,7 @@
 #define PE_NOTIFICATION_ALBUMS_FINISHED @"albumsFinished"
 
 @interface PEAlbumsModel : NSObject
-@property (strong, nonatomic) NSArray<PEAlbumNode*>* tree;
+@property (strong, nonatomic) NSMutableArray<PEAlbumNode*>* tree;
 
 - (instancetype)init;
 // Begin the load of albums asynchronously, be sure to listen to notifications
