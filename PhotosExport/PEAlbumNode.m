@@ -17,6 +17,7 @@
         self.name = group.name;
         self.uniqueId = [group.attributes objectForKey:@"identifier"];
         self.canonicalName = parent? [parent.canonicalName stringByAppendingFormat:@"/%@", self.name] : self.name;
+        self.children = [NSMutableArray array];
         
         NSLog(@"PEAlbumNode: name=%@ id=%@", self.canonicalName, self.uniqueId);
     }

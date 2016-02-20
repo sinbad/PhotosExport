@@ -8,6 +8,10 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface PEMainWindowController : NSWindowController
+@interface PEMainWindowController : NSWindowController <NSOutlineViewDataSource, NSOutlineViewDelegate> {
+    
+}
+@property (assign, nonatomic) BOOL loadingAlbums;
+@property (weak, nonatomic) IBOutlet NSOutlineView* outlineView;
 
 @end
