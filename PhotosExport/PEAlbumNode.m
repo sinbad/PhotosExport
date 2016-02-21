@@ -7,11 +7,6 @@
 //
 
 #import "PEAlbumNode.h"
-@interface PEAlbumNode()
-{
-    NSMutableArray<MLMediaObject*>* albumContents;
-}
-@end
 
 @implementation PEAlbumNode
 
@@ -56,7 +51,7 @@
             forKeyPath:@"mediaObjects"
                options:0
                context:nil];
-    albumContents = [NSMutableArray array];
+    self.albumContents = [NSMutableArray array];
     
     [self.mediaGroup mediaObjects];
 }
@@ -78,7 +73,7 @@
         }
         [self willChangeValueForKey:@"description"];
         self.totalBytes += o.fileSize;
-        [albumContents addObject:o];
+        [self.albumContents addObject:o];
         [self didChangeValueForKey:@"description"];
         //NSLog(@"%@ (url:%@ )(id:%@)", [self.canonicalName stringByAppendingFormat:@"/%@", o.name], o.URL.path, o.identifier);
     }

@@ -14,4 +14,5 @@
 @property (assign, nonatomic) BOOL loadingAlbums;
 @property (weak, nonatomic) IBOutlet NSOutlineView* outlineView;
 
+- (IBAction)export:(id)sender;
 @end

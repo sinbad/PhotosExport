@@ -9,7 +9,7 @@
 #import "PEMainWindowController.h"
 #import "PEAlbumsModel.h"
 #import "PEAlbumNode.h"
-
+#import "PEPhotosExporter.h"
 
 @interface PEMainWindowController () {
     PEAlbumsModel* model;
@@ -135,5 +135,50 @@
 }
 - (id)outlineView:(NSOutlineView *)outlineView objectValueForTableColumn:(NSTableColumn *)tableColumn byItem:(id)item {
     return item;
+}
+
+- (IBAction)export:(id)sender
+{
+    NSOpenPanel* panel = [NSOpenPanel openPanel];
+    panel.canCreateDirectories = YES;
+    panel.canChooseFiles = NO;
+    panel.canChooseDirectories = YES;
+    [panel setAllowsMultipleSelection:NO];
+    panel.title = NSLocalizedString(@"ExportPanelTitle", @"");
+    panel.message = NSLocalizedString(@"ExportPanelMessage", @"");
+    NSInteger res = [panel runModal];
+    if (res == NSFileHandlingPanelOKButton) {
+        NSError* err = [PEPhotosExporter exportPhotos:model toDir:panel.directoryURL.path];
+        if (err) {
+            NSAlert* alert = [[NSAlert alloc] init];
+            alert.alertStyle = NSCriticalAlertStyle;
+            alert.messageText = NSLocalizedString(@"ErrorDuringExport", @"");
+            if ([err.domain isEqualToString:@"PhotosExport"]) {
+                NSString* msgCode = [err.userInfo objectForKey:@"messageCode"];
+                NSArray* msgArgs = [err.userInfo objectForKey:@"messageArgs"];
+                if (msgArgs)
+                    alert.informativeText = [NSString stringWithFormat:NSLocalizedString(msgCode, @""), msgArgs];
+                else
+                    alert.informativeText = NSLocalizedString(msgCode, @"");
+        
+            } else {
+                alert.informativeText = [err description];
+            }
+            [alert addButtonWithTitle:@"OK"];
+            [alert runModal];
+        } else {
+            NSAlert* alert = [[NSAlert alloc] init];
+            alert.alertStyle = NSInformationalAlertStyle;
+            alert.messageText = NSLocalizedString(@"ExportedOKTitle", @"");
+            alert.informativeText = NSLocalizedString(@"ExportedOKMsg", @"");
+            [alert addButtonWithTitle:@"OK"];
+            [alert addButtonWithTitle:NSLocalizedString(@"ShowInFinder", @"")];
+            if ([alert runModal] == NSAlertSecondButtonReturn) {
+                [[NSWorkspace sharedWorkspace] selectFile:panel.directoryURL.path inFileViewerRootedAtPath:panel.directoryURL.path];
+            }
+        }
+    }
+    
+    
 }
 @end

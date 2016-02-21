@@ -23,4 +23,5 @@
 - (instancetype)init;
 // Begin the load of albums asynchronously, be sure to listen to notifications
 - (void)beginLoad;
+
 @end

@@ -28,7 +28,7 @@
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" viewBased="YES" indentationPerLevel="16" autoresizesOutlineColumn="YES" outlineTableColumn="fKH-te-IPB" id="g2H-Hy-qIk">
-                                    <rect key="frame" x="0.0" y="0.0" width="443" height="323"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="443" height="0.0"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -125,6 +125,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
+                            <action selector="export:" target="-1" id="K0Q-0D-4jd"/>
                             <binding destination="-2" name="enabled" keyPath="loadingAlbums" id="lkK-bG-6hR">
                                 <dictionary key="options">
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>

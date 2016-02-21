@@ -39,6 +39,8 @@ typedef NS_ENUM(NSUInteger, PEAlbumType)
 @property (assign, nonatomic) NSUInteger photoCount;
 @property (assign, nonatomic) NSUInteger videoCount;
 @property (assign, nonatomic) NSUInteger totalBytes;
+// The actual items contained
+@property (strong, nonatomic) NSMutableArray<MLMediaObject*>* albumContents;
 
 - (instancetype)initWithParent:(PEAlbumNode*)parent group:(MLMediaGroup*)group;
 // Asynchronously enumerate the items (photos, videos) in the album

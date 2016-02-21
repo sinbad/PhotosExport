@@ -1,0 +1,15 @@
+/* 
+  Localizable.strings
+  PhotosExport
+
+  Created by Steven Streeting on 21/02/2016.
+  Copyright © 2016 Steven Streeting. All rights reserved.
+*/
+"DeniedAccessToPhotosURL" = "Denied access to Photos URL (probably by user).";
+"ErrorCopyingFile" = "Error copying %@ to %@: %@";
+"ExportPanelTitle" = "Export to Directory";
+"ExportPanelMessage" = "Specify the root folder to export photos.";
+"ErrorDuringExport" = "Error during export";
+"ExportedOKTitle" = "Export completed";
+"ExportedOKMsg" = "Photo export completed successfully!";
+"ShowInFinder" = "Show In Finder";
