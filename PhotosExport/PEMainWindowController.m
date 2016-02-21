@@ -13,6 +13,7 @@
 
 @interface PEMainWindowController () {
     PEAlbumsModel* model;
+    NSDictionary<NSString*, NSNumber*>* storedSelections;
 }
 @end
 
@@ -38,13 +39,88 @@
 }
 
 - (void)albumsUpdated:(NSNotification*)notif {
+    [self loadOrDefaultSelection];
     [self.outlineView reloadData];
+    [self expandDefaults];
 }
 - (void)albumsFinished:(NSNotification*)notif {
+    [self loadOrDefaultSelection];
     [self.outlineView reloadData];
     self.loadingAlbums = NO;
+    [self expandDefaults];
 }
 
+- (NSDictionary<NSString*, NSNumber*>*)defaultSelections {
+    if (!storedSelections) {
+        // Default selections
+        storedSelections = @{
+                             @"All Albums": @(NSMixedState),
+                             @"Albums/All Photos": @(NSOnState),
+                             @"Albums/Faces": @(NSOffState),
+                             @"Albums/Last Import": @(NSOffState),
+                             @"Albums/Favorites": @(NSOffState),
+                             @"Albums/Selfies": @(NSOffState),
+                             @"Albums/Panoramas": @(NSOffState),
+                             @"Albums/Videos": @(NSOffState),
+                             @"Albums/Slo-mo": @(NSOffState),
+                             @"Albums/Bursts": @(NSOffState),
+                             @"Albums/Screenshots": @(NSOffState),
+                             };
+    }
+    
+    // TODO load from last selection to override
+    
+    return storedSelections;
+}
+
+- (void)loadOrDefaultSelection {
+    NSDictionary<NSString*, NSNumber*>* sel = [self defaultSelections];
+    for (PEAlbumNode* n in model.tree) {
+        [self recurseSetSelectionOnNode:n fromState:sel];
+    }
+}
+
+- (void)recurseSetSelectionOnNode:(PEAlbumNode*)n fromState:(NSDictionary<NSString*, NSNumber*>*)sel {
+    
+    NSNumber* saved = [sel objectForKey:n.canonicalName];
+    if (saved) {
+        n.checkState = [saved integerValue];
+    } else {
+        // Exclude all subfolders of Faces
+        if ([n.canonicalName hasPrefix:@"All Albums/Faces"]) {
+            n.checkState = NSOffState;
+        } else {
+            // default check all new/unknown albums
+            n.checkState = NSOnState;
+        }
+    }
+    
+    for (PEAlbumNode* child in n.children) {
+        [self recurseSetSelectionOnNode:child fromState:sel];
+    }
+}
+- (void)saveSelection {
+    // Save state for all nodes, including off state
+    // nodes for which no state is loaded will be defaulted
+
+    // TODO
+
+}
+- (void)expandDefaults {
+    for (PEAlbumNode* node in model.tree) {
+        [self recurseExpandDefaults:node];
+    }
+}
+
+- (void)recurseExpandDefaults:(PEAlbumNode*)n {
+    if (n.checkState != NSOffState) {
+        [self.outlineView expandItem:n];
+        
+        for (PEAlbumNode* child in n.children) {
+            [self recurseExpandDefaults:child];
+        }
+    }
+}
 - (BOOL)outlineView:(NSOutlineView *)outlineView isItemExpandable:(id)item {
     PEAlbumNode* node = item;
     return node.children.count > 0;

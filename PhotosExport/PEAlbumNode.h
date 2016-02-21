@@ -25,6 +25,7 @@ typedef NS_ENUM(NSUInteger, PEAlbumType)
 @property (copy, nonatomic) NSString* name;
 @property (copy, nonatomic) NSString* uniqueId;
 @property (copy, nonatomic) NSString* canonicalName; // name with full path leading to it
+@property (assign, nonatomic) NSInteger checkState; // tri-state (mixed if only some children checked)
 @property (strong, nonatomic) MLMediaGroup* mediaGroup;
 
 - (instancetype)initWithParent:(PEAlbumNode*)parent group:(MLMediaGroup*)group;
