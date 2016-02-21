@@ -61,6 +61,13 @@
         }
         [url stopAccessingSecurityScopedResource];
     }
+    
+    for (PEAlbumNode* child in node.children) {
+        NSError* err = [self recursePhotos:child rootDir:rootDir];
+        if (err)
+            return err;
+    }
+    
     return nil;
 }
 @end
