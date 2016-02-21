@@ -124,6 +124,13 @@
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
+                        <connections>
+                            <binding destination="-2" name="enabled" keyPath="loadingAlbums" id="lkK-bG-6hR">
+                                <dictionary key="options">
+                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                </dictionary>
+                            </binding>
+                        </connections>
                     </button>
                 </subviews>
                 <constraints>
