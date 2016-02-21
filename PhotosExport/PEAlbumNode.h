@@ -17,6 +17,9 @@ typedef NS_ENUM(NSUInteger, PEAlbumType)
     PEAlbumTypeSmart = 1
 };
 
+// Notification that item enumeration (beginEnumerateItems) has finished
+#define PE_ALBUM_ENUMERATE_ITEMS_FINISHED @"albumItemsFinished"
+
 @interface PEAlbumNode : NSObject
 
 @property (weak, nonatomic) PEAlbumNode* parent;
@@ -27,7 +30,12 @@ typedef NS_ENUM(NSUInteger, PEAlbumType)
 @property (copy, nonatomic) NSString* canonicalName; // name with full path leading to it
 @property (assign, nonatomic) NSInteger checkState; // tri-state (mixed if only some children checked)
 @property (strong, nonatomic) MLMediaGroup* mediaGroup;
+// These items won't be up to date until beginEnumerateItems has finished
+@property (assign, nonatomic) NSUInteger photoCount;
+@property (assign, nonatomic) NSUInteger videoCount;
+@property (assign, nonatomic) NSUInteger totalBytes;
 
 - (instancetype)initWithParent:(PEAlbumNode*)parent group:(MLMediaGroup*)group;
-
+// Asynchronously enumerate the items (photos, videos) in the album
+- (void)beginEnumerateItems;
 @end

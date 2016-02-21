@@ -7,6 +7,11 @@
 //
 
 #import "PEAlbumNode.h"
+@interface PEAlbumNode()
+{
+    NSMutableArray<MLMediaObject*>* albumContents;
+}
+@end
 
 @implementation PEAlbumNode
 
@@ -19,9 +24,58 @@
         self.canonicalName = parent? [parent.canonicalName stringByAppendingFormat:@"/%@", self.name] : self.name;
         self.children = [NSMutableArray array];
         
-        NSLog(@"PEAlbumNode: name=%@ id=%@", self.canonicalName, self.uniqueId);
     }
     return self;
+}
+
+- (void)beginEnumerateItems {
+    [self.mediaGroup addObserver:self
+            forKeyPath:@"mediaObjects"
+               options:0
+               context:nil];
+    albumContents = [NSMutableArray array];
+    
+    [self.mediaGroup mediaObjects];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object
+                        change:(NSDictionary *)change context:(void *)context {
+    // Only used for mediaObjects ready notification
+    for(MLMediaObject* o in self.mediaGroup.mediaObjects)
+    {
+        switch(o.mediaType) {
+            case MLMediaTypeImage:
+                self.photoCount++;
+                break;
+            case MLMediaTypeMovie:
+                self.videoCount++;
+                break;
+            default:
+                continue; // should never happen
+        }
+        [self willChangeValueForKey:@"description"];
+        self.totalBytes += o.fileSize;
+        [albumContents addObject:o];
+        [self didChangeValueForKey:@"description"];
+        NSLog(@"%@ (id:%@)", [self.canonicalName stringByAppendingFormat:@"/%@", o.name], o.identifier);
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:PE_ALBUM_ENUMERATE_ITEMS_FINISHED object:self];
+}
+
+- (NSString *)description {
+    NSMutableString* s = [NSMutableString stringWithString:self.name];
+    if (self.photoCount || self.videoCount) {
+        [s appendString:@" ("];
+        if (self.photoCount)
+            [s appendFormat:@"%ld photos", self.photoCount];
+        if (self.videoCount) {
+            if (self.photoCount)
+                [s appendString:@", "];
+            [s appendFormat:@"%ld videos", self.videoCount];
+        }
+        [s appendFormat:@", %@)", [NSByteCountFormatter stringFromByteCount:self.totalBytes countStyle:NSByteCountFormatterCountStyleFile]];
+    }
+    return s;
 }
 
 @end

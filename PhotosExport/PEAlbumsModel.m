@@ -13,6 +13,7 @@
 @interface PEAlbumsModel() {
     MLMediaLibrary* mediaLibrary;
     MLMediaSource *mediaSource;
+    NSUInteger nodesEnumerating;
 }
 @end
 
@@ -32,6 +33,7 @@
 - (void)beginLoad {
     [mediaLibrary addObserver:self forKeyPath:@"mediaSources" options:0 context:(__bridge void *)mediaLibrary];
     self.tree = [NSMutableArray array];
+    nodesEnumerating = 0;
     // This starts async loading
     [mediaLibrary mediaSources];
     
@@ -57,8 +59,6 @@
         MLMediaGroup *albums = [mediaSource mediaGroupForIdentifier:@"TopLevelAlbums"];
         
         [self recurseGroup:albums];
-
-        [[NSNotificationCenter defaultCenter] postNotificationName:PE_NOTIFICATION_ALBUMS_FINISHED object:self];
     }
 }
 
@@ -73,12 +73,25 @@
     else
         [parent.children addObject:newNode];
     
+    nodesEnumerating++;
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(nodeEnumerated:) name:PE_ALBUM_ENUMERATE_ITEMS_FINISHED object:newNode];
+    [newNode beginEnumerateItems];
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:PE_NOTIFICATION_ALBUMS_PROGRESS object:self];
     
     for (MLMediaGroup *subgroup in group.childGroups) {
         [self recurseGroup:subgroup parentNode:newNode];
     }
 }
+
+- (void)nodeEnumerated:(NSNotification*)notif {
+    nodesEnumerating--;
+    if (!nodesEnumerating) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:PE_NOTIFICATION_ALBUMS_FINISHED object:self];
+    }
+}
+
+
 
 
 @end

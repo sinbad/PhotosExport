@@ -59,7 +59,7 @@
                                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                             <connections>
-                                                                <binding destination="Rdc-3a-582" name="value" keyPath="objectValue.name" id="iTG-gY-ojR"/>
+                                                                <binding destination="Rdc-3a-582" name="value" keyPath="objectValue.description" id="dQU-bP-w3c"/>
                                                             </connections>
                                                         </textField>
                                                         <button translatesAutoresizingMaskIntoConstraints="NO" id="4sb-7E-qMY">
