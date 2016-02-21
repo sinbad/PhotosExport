@@ -89,6 +89,14 @@
         [self recurseSetSelectionOnNode:child fromState:sel];
     }
 }
+- (IBAction)checkboxClicked:(id)sender {
+    NSButton* b = sender;
+    // Automatically click again if setting to mixed, don't allow this from user input
+    if([b state] == NSMixedState) {
+        [[sender selectedCell] performClick:sender];
+        return;
+    }
+}
 - (void)saveSelection {
     // Save state for all nodes, including off state
     // nodes for which no state is loaded will be defaulted

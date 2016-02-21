@@ -6,6 +6,7 @@
 //  Copyright © 2016 Steven Streeting. All rights reserved.
 //
 
+@import Cocoa;
 #import "PEAlbumNode.h"
 
 @implementation PEAlbumNode
@@ -100,4 +101,70 @@
     return s;
 }
 
+- (void)checkChildCheckState {
+    BOOL allChecked = YES;
+    BOOL allUnchecked = YES;
+    for (PEAlbumNode* child in self.children) {
+        switch (child.checkState) {
+            case NSOffState:
+                allChecked = NO;
+                break;
+            case NSOnState:
+            case NSMixedState:
+                allUnchecked = NO;
+                break;
+        }
+    }
+    NSInteger newState = _checkState;
+    // Don't want to trigger property here because we only propagate upwards
+    if (allChecked)
+        newState = NSOnState;
+    else if (allUnchecked)
+        newState = NSOffState;
+    else
+        newState = NSMixedState;
+    
+    if (newState != _checkState) {
+        [self willChangeValueForKey:@"checkState"];
+        _checkState = newState;
+        [self didChangeValueForKey:@"checkState"];
+        if (self.parent)
+            [self.parent checkChildCheckState];
+    }
+    
+}
+
+- (void)checkStateOverride:(NSNumber*)c {
+    self.checkState = [c integerValue];
+}
+- (void)setCheckState:(NSInteger)c {
+    if (c == NSMixedState) {
+        // Can't be mixed from outside, only internally
+        return;
+    }
+    _checkState = c;
+    
+    // Tell parent
+    if (self.parent)
+        [self.parent checkChildCheckState];
+    
+    // Propagate to children
+    for (PEAlbumNode* child in self.children)
+        [child setCheckStateFromParent:_checkState];
+        
+}
+
+- (void)setCheckStateFromParent:(NSInteger)c {
+    // Don't want to trigger property here because we only propagate upwards
+    if (c != _checkState) {
+        [self willChangeValueForKey:@"checkState"];
+        _checkState = c;
+        [self didChangeValueForKey:@"checkState"];
+        
+        // Propagate to children
+        for (PEAlbumNode* child in self.children)
+            child.checkState = _checkState;
+
+    }
+}
 @end

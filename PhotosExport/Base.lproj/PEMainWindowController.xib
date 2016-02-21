@@ -52,7 +52,7 @@
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <textField horizontalHuggingPriority="249" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="lxc-BP-UQb">
-                                                            <rect key="frame" x="24" y="0.0" width="413" height="17"/>
+                                                            <rect key="frame" x="20" y="0.0" width="417" height="17"/>
                                                             <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="H9d-9a-qDe">
                                                                 <font key="font" metaFont="system"/>
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -63,12 +63,13 @@
                                                             </connections>
                                                         </textField>
                                                         <button translatesAutoresizingMaskIntoConstraints="NO" id="4sb-7E-qMY">
-                                                            <rect key="frame" x="3" y="-1" width="22" height="18"/>
-                                                            <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" state="on" allowsMixedState="YES" inset="2" id="lCc-uG-LdC">
+                                                            <rect key="frame" x="3" y="-1" width="18" height="18"/>
+                                                            <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="only" state="on" allowsMixedState="YES" inset="2" id="lCc-uG-LdC">
                                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                                 <font key="font" metaFont="system"/>
                                                             </buttonCell>
                                                             <connections>
+                                                                <action selector="checkboxClicked:" target="-2" id="t55-Zd-EYz"/>
                                                                 <binding destination="Rdc-3a-582" name="value" keyPath="objectValue.checkState" id="HaX-VJ-kkl"/>
                                                             </connections>
                                                         </button>
