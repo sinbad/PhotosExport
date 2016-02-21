@@ -54,17 +54,16 @@
     if (!storedSelections) {
         // Default selections
         storedSelections = @{
-                             @"All Albums": @(NSMixedState),
-                             @"Albums/All Photos": @(NSOnState),
-                             @"Albums/Faces": @(NSOffState),
-                             @"Albums/Last Import": @(NSOffState),
-                             @"Albums/Favorites": @(NSOffState),
-                             @"Albums/Selfies": @(NSOffState),
-                             @"Albums/Panoramas": @(NSOffState),
-                             @"Albums/Videos": @(NSOffState),
-                             @"Albums/Slo-mo": @(NSOffState),
-                             @"Albums/Bursts": @(NSOffState),
-                             @"Albums/Screenshots": @(NSOffState),
+                             @"All Photos": @(NSOnState),
+                             @"Faces": @(NSOffState),
+                             @"Last Import": @(NSOffState),
+                             @"Favorites": @(NSOffState),
+                             @"Selfies": @(NSOffState),
+                             @"Panoramas": @(NSOffState),
+                             @"Videos": @(NSOffState),
+                             @"Slo-mo": @(NSOffState),
+                             @"Bursts": @(NSOffState),
+                             @"Screenshots": @(NSOffState),
                              };
     }
     

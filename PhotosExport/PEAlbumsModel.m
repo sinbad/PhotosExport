@@ -66,18 +66,23 @@
     [self recurseGroup:group parentNode:nil];
 }
 - (void)recurseGroup:(MLMediaGroup*)group parentNode:(PEAlbumNode*)parent {
+    PEAlbumNode* newNode = nil;
     
-    PEAlbumNode* newNode = [[PEAlbumNode alloc] initWithParent:parent group:group];
-    if (!parent)
-        [self.tree addObject:newNode];
-    else
-        [parent.children addObject:newNode];
-    
-    nodesEnumerating++;
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(nodeEnumerated:) name:PE_ALBUM_ENUMERATE_ITEMS_FINISHED object:newNode];
-    [newNode beginEnumerateItems];
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:PE_NOTIFICATION_ALBUMS_PROGRESS object:self];
+    // Don't include root albums group, start at next level down
+    if (![group.typeIdentifier isEqualToString:@"com.apple.Photos.AlbumsGroup"])
+    {
+        newNode = [[PEAlbumNode alloc] initWithParent:parent group:group];
+        if (!parent)
+            [self.tree addObject:newNode];
+        else
+            [parent.children addObject:newNode];
+        
+        nodesEnumerating++;
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(nodeEnumerated:) name:PE_ALBUM_ENUMERATE_ITEMS_FINISHED object:newNode];
+        [newNode beginEnumerateItems];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:PE_NOTIFICATION_ALBUMS_PROGRESS object:self];
+    }
     
     for (MLMediaGroup *subgroup in group.childGroups) {
         [self recurseGroup:subgroup parentNode:newNode];
