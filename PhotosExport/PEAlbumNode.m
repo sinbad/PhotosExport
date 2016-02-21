@@ -34,12 +34,16 @@
           @"com.apple.Photos.SmartAlbum" : @(PEAlbumTypeUserSmart),
           };
         
-        NSNumber* t = [typeMap objectForKey:group.typeIdentifier];
-        if (t)
-            self.albumType = [t integerValue];
-        else
-            self.albumType = PEAlbumTypeAlbum;
-        
+        // Special case Faces root (treat as a folder)
+        if ([group.name isEqualToString:@"Faces"] && [group.typeIdentifier isEqualToString:@"com.apple.Photos.FacesAlbum"]) {
+            self.albumType = PEAlbumTypeFolder;
+        } else {
+            NSNumber* t = [typeMap objectForKey:group.typeIdentifier];
+            if (t)
+                self.albumType = [t integerValue];
+            else
+                self.albumType = PEAlbumTypeAlbum;
+        }
         NSLog(@"PEAlbumNode: %@ (type:%@)", self.name, self.mediaGroup.typeIdentifier);
         
     }
