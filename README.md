@@ -10,6 +10,7 @@ This is just something I hacked together in a few hours that I'm publishing for 
 
 ## TODO ##
 
+* Remember selections across app restarts
 * Support resizing during export
 * Select / deselect all
 * Check existing files & skip if already there & same date/size
@@ -17,4 +18,5 @@ This is just something I hacked together in a few hours that I'm publishing for 
 * Sorting options (currently ordering is identical to Photos)
 * Add option: export originals (currently exports edited versions)
 * Add option: skip duplicates (photo in multiple albums) or symlink
+* Expose command line interface for scheduled running
 
