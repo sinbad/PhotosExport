@@ -12,9 +12,14 @@
 typedef NS_ENUM(NSUInteger, PEAlbumType)
 {
     // A regular album
-    PEAlbumTypeNormal = 0,
-    // Smart album like Faces, Screenshots (probably omit)
-    PEAlbumTypeSmart = 1
+    PEAlbumTypeAlbum = 0,
+    // Group folder (no items)
+    PEAlbumTypeFolder = 1,
+    // Smart Album (user created)
+    PEAlbumTypeUserSmart = 2,
+    // Faces, Selfies, Last Import etc - all default ignore
+    PEAlbumTypeSystemSmart = 3,
+    
 };
 
 // Notification that item enumeration (beginEnumerateItems) has finished

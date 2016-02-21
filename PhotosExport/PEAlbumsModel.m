@@ -77,9 +77,12 @@
         else
             [parent.children addObject:newNode];
         
-        nodesEnumerating++;
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(nodeEnumerated:) name:PE_ALBUM_ENUMERATE_ITEMS_FINISHED object:newNode];
-        [newNode beginEnumerateItems];
+        // Enumerate objects if it's not a folder (which have no items)
+        if (newNode.albumType != PEAlbumTypeFolder) {
+            nodesEnumerating++;
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(nodeEnumerated:) name:PE_ALBUM_ENUMERATE_ITEMS_FINISHED object:newNode];
+            [newNode beginEnumerateItems];
+        }
         
         [[NSNotificationCenter defaultCenter] postNotificationName:PE_NOTIFICATION_ALBUMS_PROGRESS object:self];
     }

@@ -24,6 +24,29 @@
         self.canonicalName = parent? [parent.canonicalName stringByAppendingFormat:@"/%@", self.name] : self.name;
         self.children = [NSMutableArray array];
         
+        NSDictionary<NSString*, NSNumber*>* typeMap =
+        @{
+          @"com.apple.Photos.FacesAlbum" : @(PEAlbumTypeSystemSmart),
+          @"com.apple.Photos.LastImportGroup" : @(PEAlbumTypeSystemSmart),
+          @"com.apple.Photos.FavoritesGroup" : @(PEAlbumTypeSystemSmart),
+          @"com.apple.Photos.FrontCameraGroup" : @(PEAlbumTypeSystemSmart), // Selfies
+          @"com.apple.Photos.PanoramasGroup" : @(PEAlbumTypeSystemSmart),
+          @"com.apple.Photos.VideosGroup" : @(PEAlbumTypeSystemSmart),
+          @"com.apple.Photos.SloMoGroup" : @(PEAlbumTypeSystemSmart),
+          @"com.apple.Photos.BurstGroup" : @(PEAlbumTypeSystemSmart),
+          @"com.apple.Photos.Folder" : @(PEAlbumTypeFolder),
+          @"com.apple.Photos.Album" : @(PEAlbumTypeAlbum),
+          @"com.apple.Photos.SmartAlbum" : @(PEAlbumTypeUserSmart),
+          };
+        
+        NSNumber* t = [typeMap objectForKey:group.typeIdentifier];
+        if (t)
+            self.albumType = [t integerValue];
+        else
+            self.albumType = PEAlbumTypeAlbum;
+        
+        NSLog(@"PEAlbumNode: %@ (type:%@)", self.name, self.mediaGroup.typeIdentifier);
+        
     }
     return self;
 }
@@ -57,7 +80,7 @@
         self.totalBytes += o.fileSize;
         [albumContents addObject:o];
         [self didChangeValueForKey:@"description"];
-        NSLog(@"%@ (id:%@)", [self.canonicalName stringByAppendingFormat:@"/%@", o.name], o.identifier);
+        //NSLog(@"%@ (url:%@ )(id:%@)", [self.canonicalName stringByAppendingFormat:@"/%@", o.name], o.URL.path, o.identifier);
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:PE_ALBUM_ENUMERATE_ITEMS_FINISHED object:self];
 }

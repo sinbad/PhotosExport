@@ -52,22 +52,10 @@
 
 - (NSDictionary<NSString*, NSNumber*>*)defaultSelections {
     if (!storedSelections) {
-        // Default selections
-        storedSelections = @{
-                             @"All Photos": @(NSOnState),
-                             @"Faces": @(NSOffState),
-                             @"Last Import": @(NSOffState),
-                             @"Favorites": @(NSOffState),
-                             @"Selfies": @(NSOffState),
-                             @"Panoramas": @(NSOffState),
-                             @"Videos": @(NSOffState),
-                             @"Slo-mo": @(NSOffState),
-                             @"Bursts": @(NSOffState),
-                             @"Screenshots": @(NSOffState),
-                             };
+        // TODO load from last selection to override
+        storedSelections = @{};
     }
     
-    // TODO load from last selection to override
     
     return storedSelections;
 }
@@ -85,12 +73,15 @@
     if (saved) {
         n.checkState = [saved integerValue];
     } else {
-        // Exclude all subfolders of Faces
-        if ([n.canonicalName hasPrefix:@"All Albums/Faces"]) {
-            n.checkState = NSOffState;
-        } else {
-            // default check all new/unknown albums
-            n.checkState = NSOnState;
+        // default by album type; default check proper albums & folders, ignore smart filters
+        switch (n.albumType) {
+            case PEAlbumTypeAlbum:
+            case PEAlbumTypeFolder:
+                n.checkState = NSOnState;
+                break;
+            default:
+                n.checkState = NSOffState;
+                break;
         }
     }
     
