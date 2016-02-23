@@ -6,13 +6,14 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="PEMainWindowController">
             <connections>
+                <outlet property="exportProgressWindow" destination="yla-dR-vtw" id="Xuh-s4-Y18"/>
                 <outlet property="outlineView" destination="g2H-Hy-qIk" id="He9-ZG-KTZ"/>
                 <outlet property="window" destination="F0z-JX-Cv5" id="mXO-Ku-ZXh"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <window title="Export Photos" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" oneShot="NO" releasedWhenClosed="NO" animationBehavior="default" id="F0z-JX-Cv5">
+        <window title="Export Photos" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" oneShot="NO" releasedWhenClosed="NO" animationBehavior="default" id="F0z-JX-Cv5" userLabel="MainWindow">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="480" height="429"/>
@@ -152,5 +153,82 @@
             <point key="canvasLocation" x="310" y="296.5"/>
         </window>
         <userDefaultsController representsSharedInstance="YES" id="rIs-jw-eET"/>
+        <window title="Export In Progress" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="yla-dR-vtw" userLabel="ProgressWindow">
+            <windowStyleMask key="styleMask" titled="YES"/>
+            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+            <rect key="contentRect" x="131" y="158" width="526" height="132"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
+            <view key="contentView" id="jau-QO-Uei">
+                <rect key="frame" x="0.0" y="0.0" width="526" height="132"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cbq-v3-pAe">
+                        <rect key="frame" x="437" y="13" width="75" height="32"/>
+                        <buttonCell key="cell" type="push" title="Abort" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ZQ8-qv-DLJ">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="cancelExport:" target="-2" id="wU1-Qh-MTT"/>
+                        </connections>
+                    </button>
+                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="PVv-D6-1lg">
+                        <rect key="frame" x="18" y="95" width="390" height="17"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Exporting..." id="P4s-dJ-Yzz">
+                            <font key="font" metaFont="systemBold"/>
+                            <color key="textColor" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <progressIndicator wantsLayer="YES" maxValue="100" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="7E7-1Z-PuG">
+                        <rect key="frame" x="20" y="68" width="486" height="20"/>
+                        <connections>
+                            <binding destination="-2" name="maxValue" keyPath="exportProgressTotalBytes" id="ZwI-aw-50o"/>
+                            <binding destination="-2" name="value" keyPath="exportProgressBytesDone" previousBinding="ZwI-aw-50o" id="TGF-ig-uhf"/>
+                        </connections>
+                    </progressIndicator>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="L3Q-aG-QIe">
+                        <rect key="frame" x="18" y="56" width="490" height="14"/>
+                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="gis-y4-8px">
+                            <font key="font" metaFont="smallSystem"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                        <connections>
+                            <binding destination="-2" name="value" keyPath="exportProgressItem" id="t3P-aF-hNp"/>
+                        </connections>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bEC-9g-uxC">
+                        <rect key="frame" x="412" y="95" width="96" height="17"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="20MB / 300MB" id="BoB-c2-5gf">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                        <connections>
+                            <binding destination="-2" name="value" keyPath="exportProgressSizeDesc" id="Yrv-Cv-rDq"/>
+                        </connections>
+                    </textField>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="cbq-v3-pAe" secondAttribute="trailing" constant="20" symbolic="YES" id="12t-kf-xDJ"/>
+                    <constraint firstItem="bEC-9g-uxC" firstAttribute="leading" secondItem="PVv-D6-1lg" secondAttribute="trailing" constant="8" symbolic="YES" id="1Ue-d5-M1h"/>
+                    <constraint firstItem="bEC-9g-uxC" firstAttribute="centerY" secondItem="PVv-D6-1lg" secondAttribute="centerY" id="6LZ-td-teh"/>
+                    <constraint firstItem="7E7-1Z-PuG" firstAttribute="leading" secondItem="jau-QO-Uei" secondAttribute="leading" constant="20" id="6sN-pL-YHj"/>
+                    <constraint firstItem="PVv-D6-1lg" firstAttribute="leading" secondItem="jau-QO-Uei" secondAttribute="leading" constant="20" id="GUo-cZ-Hjv"/>
+                    <constraint firstItem="L3Q-aG-QIe" firstAttribute="top" secondItem="7E7-1Z-PuG" secondAttribute="bottom" constant="-1" id="JfF-IM-yfl"/>
+                    <constraint firstItem="7E7-1Z-PuG" firstAttribute="top" secondItem="PVv-D6-1lg" secondAttribute="bottom" constant="8" id="Kwc-XU-CiR"/>
+                    <constraint firstAttribute="trailing" secondItem="bEC-9g-uxC" secondAttribute="trailing" constant="20" id="LUf-FS-WMP"/>
+                    <constraint firstItem="cbq-v3-pAe" firstAttribute="top" secondItem="L3Q-aG-QIe" secondAttribute="bottom" constant="15" id="YXY-ld-F3A"/>
+                    <constraint firstItem="L3Q-aG-QIe" firstAttribute="leading" secondItem="jau-QO-Uei" secondAttribute="leading" constant="20" id="eIO-cV-3tN"/>
+                    <constraint firstAttribute="bottom" secondItem="cbq-v3-pAe" secondAttribute="bottom" constant="20" id="eVg-wA-GGY"/>
+                    <constraint firstAttribute="trailing" secondItem="L3Q-aG-QIe" secondAttribute="trailing" constant="20" symbolic="YES" id="kKw-0m-USt"/>
+                    <constraint firstItem="7E7-1Z-PuG" firstAttribute="top" secondItem="bEC-9g-uxC" secondAttribute="bottom" constant="8" id="uRS-qt-IKk"/>
+                    <constraint firstItem="PVv-D6-1lg" firstAttribute="top" secondItem="jau-QO-Uei" secondAttribute="top" constant="20" id="wil-7E-hMv"/>
+                    <constraint firstAttribute="trailing" secondItem="7E7-1Z-PuG" secondAttribute="trailing" constant="20" id="yEu-0P-rHc"/>
+                </constraints>
+            </view>
+            <point key="canvasLocation" x="332" y="672"/>
+        </window>
     </objects>
 </document>

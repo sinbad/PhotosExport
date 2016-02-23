@@ -14,17 +14,44 @@
 @implementation PEPhotosExporter
 
 
-+ (NSError*)exportPhotos:(PEAlbumsModel*)model toDir:(NSString*)dir {
++ (NSError*)exportPhotos:(PEAlbumsModel*)model toDir:(NSString*)dir
+                callback:(BOOL (^)(NSString*, NSUInteger, NSUInteger))callback {
+    
+    // First add up out what we're going to export for progress
+    NSUInteger numPhotos, numVideos, totalBytes = 0;
+    for (PEAlbumNode* n in model.tree) {
+        [self recurseGetSize:n outNumPhotos:&numPhotos outNumVideos:&numVideos outTotalBytes:&totalBytes];
+    }
     
     for (PEAlbumNode* n in model.tree) {
-        NSError* err = [self recursePhotos:n rootDir:dir];
+        NSError* err = [self recurseExport:n rootDir:dir callback:callback bytesDone:0 totalBytes:totalBytes];
         if (err)
             return err;
     }
     return nil;
 }
 
-+ (NSError*)recursePhotos:(PEAlbumNode*)node rootDir:(NSString*)rootDir {
++ (void)recurseGetSize:(PEAlbumNode*)node outNumPhotos:(NSUInteger*)numPhotos outNumVideos:(NSUInteger*)numVideos outTotalBytes:(NSUInteger*)totalBytes {
+
+    // Skip & don't recurse into off nodes
+    if (node.checkState == NSOffState)
+        return;
+
+    *numPhotos += node.photoCount;
+    *numVideos += node.videoCount;
+    *totalBytes += node.totalBytes;
+    
+    for (PEAlbumNode* child in node.children) {
+        [self recurseGetSize:child outNumPhotos:numPhotos outNumVideos:numVideos outTotalBytes:totalBytes];
+    }
+
+    
+}
+
++ (NSError*)recurseExport:(PEAlbumNode*)node rootDir:(NSString*)rootDir
+                 callback:(BOOL (^)(NSString*, NSUInteger, NSUInteger))callback
+                bytesDone:(NSUInteger)bytesDone totalBytes:(NSUInteger)totalBytes
+{
     // Skip & don't recurse into off nodes
     if (node.checkState == NSOffState)
         return nil;
@@ -51,19 +78,33 @@
         NSString* fullpath = [dir stringByAppendingPathComponent:filename];
         NSURL* destURL = [NSURL fileURLWithPath:fullpath];
         
+        // Report item in album format for progress
+        NSString* progressItem = [node.canonicalName stringByAppendingPathComponent:filename];
+        
+        if (!callback(progressItem, bytesDone, totalBytes))
+            return [NSError errorWithDomain:@"PhotosExport"
+                                       code:99
+                                   userInfo:@{@"messageCode": @"UserCancelledExport"}];
+        
+        
         if (![fm copyItemAtURL:url toURL:destURL error:&ferr]) {
             [url stopAccessingSecurityScopedResource];
             return [NSError errorWithDomain:@"PhotosExport"
-                                       code:2
+                                       code:4
                                    userInfo:@{@"messageCode": @"ErrorCopyingFile",
                                               @"messageArgs": @[url.path, fullpath, ferr.description]}];
             
         }
         [url stopAccessingSecurityScopedResource];
+        bytesDone += o.fileSize;
+        if (!callback(progressItem, bytesDone, totalBytes))
+            return [NSError errorWithDomain:@"PhotosExport"
+                                       code:99
+                                   userInfo:@{@"messageCode": @"UserCancelledExport"}];
     }
     
     for (PEAlbumNode* child in node.children) {
-        NSError* err = [self recursePhotos:child rootDir:rootDir];
+        NSError* err = [self recurseExport:child rootDir:rootDir callback:callback bytesDone:bytesDone totalBytes:totalBytes];
         if (err)
             return err;
     }

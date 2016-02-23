@@ -13,3 +13,4 @@
 "ExportedOKTitle" = "Export completed";
 "ExportedOKMsg" = "Photo export completed successfully!";
 "ShowInFinder" = "Show In Finder";
+"UserCancelledExport" = "Export cancelled by user request.";

@@ -14,6 +14,7 @@
 @interface PEMainWindowController () {
     PEAlbumsModel* model;
     NSDictionary<NSString*, NSNumber*>* storedSelections;
+    BOOL exportCancelRequested;
 }
 @end
 
@@ -156,37 +157,74 @@
     panel.message = NSLocalizedString(@"ExportPanelMessage", @"");
     NSInteger res = [panel runModal];
     if (res == NSFileHandlingPanelOKButton) {
-        NSError* err = [PEPhotosExporter exportPhotos:model toDir:panel.directoryURL.path];
-        if (err) {
-            NSAlert* alert = [[NSAlert alloc] init];
-            alert.alertStyle = NSCriticalAlertStyle;
-            alert.messageText = NSLocalizedString(@"ErrorDuringExport", @"");
-            if ([err.domain isEqualToString:@"PhotosExport"]) {
-                NSString* msgCode = [err.userInfo objectForKey:@"messageCode"];
-                NSArray* msgArgs = [err.userInfo objectForKey:@"messageArgs"];
-                if (msgArgs)
-                    alert.informativeText = [NSString stringWithFormat:NSLocalizedString(msgCode, @""), msgArgs];
-                else
-                    alert.informativeText = NSLocalizedString(msgCode, @"");
         
-            } else {
-                alert.informativeText = [err description];
-            }
-            [alert addButtonWithTitle:@"OK"];
-            [alert runModal];
-        } else {
-            NSAlert* alert = [[NSAlert alloc] init];
-            alert.alertStyle = NSInformationalAlertStyle;
-            alert.messageText = NSLocalizedString(@"ExportedOKTitle", @"");
-            alert.informativeText = NSLocalizedString(@"ExportedOKMsg", @"");
-            [alert addButtonWithTitle:@"OK"];
-            [alert addButtonWithTitle:NSLocalizedString(@"ShowInFinder", @"")];
-            if ([alert runModal] == NSAlertSecondButtonReturn) {
-                [[NSWorkspace sharedWorkspace] selectFile:panel.directoryURL.path inFileViewerRootedAtPath:panel.directoryURL.path];
-            }
-        }
+        // Begin progress sheet
+        [self.window beginSheet:self.exportProgressWindow completionHandler:^(NSModalResponse returnCode) {
+            [self.exportProgressWindow orderOut:self];
+        }];
+        
+        // export in a background thread
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            NSError* err = [PEPhotosExporter exportPhotos:model toDir:panel.directoryURL.path callback:^BOOL(NSString *nextItem, NSUInteger bytesDone, NSUInteger totalBytes) {
+                return [self updateExportProgress:nextItem bytesDone:bytesDone totalBytes:totalBytes];
+            }];
+            // Back to main queue for error/success processing
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.window endSheet:self.exportProgressWindow returnCode:err ? NSModalResponseCancel : NSModalResponseOK];
+                if (err) {
+                    NSAlert* alert = [[NSAlert alloc] init];
+                    alert.alertStyle = NSCriticalAlertStyle;
+                    alert.messageText = NSLocalizedString(@"ErrorDuringExport", @"");
+                    if ([err.domain isEqualToString:@"PhotosExport"]) {
+                        // This doesn't work; subclass NSError instead
+                        NSString* msgCode = [err.userInfo objectForKey:@"messageCode"];
+                        NSArray* msgArgs = [err.userInfo objectForKey:@"messageArgs"];
+                        if (msgArgs)
+                            alert.informativeText = [NSString stringWithFormat:NSLocalizedString(msgCode, @""), msgArgs];
+                        else
+                            alert.informativeText = NSLocalizedString(msgCode, @"");
+                        
+                    } else {
+                        alert.informativeText = [err description];
+                    }
+                    [alert addButtonWithTitle:@"OK"];
+                    [alert runModal];
+                } else {
+                    NSAlert* alert = [[NSAlert alloc] init];
+                    alert.alertStyle = NSInformationalAlertStyle;
+                    alert.messageText = NSLocalizedString(@"ExportedOKTitle", @"");
+                    alert.informativeText = NSLocalizedString(@"ExportedOKMsg", @"");
+                    [alert addButtonWithTitle:@"OK"];
+                    [alert addButtonWithTitle:NSLocalizedString(@"ShowInFinder", @"")];
+                    if ([alert runModal] == NSAlertSecondButtonReturn) {
+                        [[NSWorkspace sharedWorkspace] selectFile:panel.directoryURL.path inFileViewerRootedAtPath:panel.directoryURL.path];
+                    }
+                }
+            });
+            
+        });
     }
-    
-    
 }
+
+- (BOOL)updateExportProgress:(NSString*)progressItem bytesDone:(NSUInteger)bytesDone totalBytes:(NSUInteger)totalBytes {
+    // Called in a background thread
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.exportProgressItem = progressItem;
+        self.exportProgressBytesDone = bytesDone;
+        self.exportProgressTotalBytes = totalBytes;
+        self.exportProgressSizeDesc = [NSString stringWithFormat:@"%@ / %@",
+                                       [NSByteCountFormatter stringFromByteCount:bytesDone countStyle:NSByteCountFormatterCountStyleFile],
+                                       [NSByteCountFormatter stringFromByteCount:totalBytes countStyle:NSByteCountFormatterCountStyleFile]];
+    });
+    
+    // This is a background thread but don't bother locking, single transition &
+    // 100% integrity not needed
+    return !exportCancelRequested;
+}
+
+- (IBAction)cancelExport:(id)sender {
+    // No lock needed, single transition flag
+    exportCancelRequested = YES;
+}
+
 @end

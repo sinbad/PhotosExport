@@ -13,5 +13,6 @@
 @interface PEPhotosExporter : NSObject
 
 // Export model with selected items to dir
-+ (NSError*)exportPhotos:(PEAlbumsModel*)model toDir:(NSString*)dir;
++ (NSError*)exportPhotos:(PEAlbumsModel*)model toDir:(NSString*)dir
+                callback:(BOOL (^)(NSString* nextItem, NSUInteger bytesDone, NSUInteger totalBytes))callback;
 @end
