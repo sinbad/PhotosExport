@@ -207,7 +207,7 @@
                         alert.informativeText = [err.userInfo objectForKey:@"message"];
                         
                     } else {
-                        alert.informativeText = [err description];
+                        alert.informativeText = [err localizedDescription];
                     }
                     [alert addButtonWithTitle:@"OK"];
                     [alert runModal];

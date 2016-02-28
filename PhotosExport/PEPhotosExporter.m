@@ -86,7 +86,7 @@
         if (![fm copyItemAtURL:url toURL:destURL error:&ferr]) {
             copyError = [NSError errorWithDomain:@"PhotosExport"
                                             code:4
-                                        userInfo:@{@"message": [NSString stringWithFormat:NSLocalizedString(@"ErrorCopyingFile", @""), url.path, fullpath, ferr.description]}];
+                                        userInfo:@{@"message": [NSString stringWithFormat:NSLocalizedString(@"ErrorCopyingFile", @""), url.path, fullpath, ferr.localizedDescription]}];
         }
         [url stopAccessingSecurityScopedResource];
         bytesDone += o.fileSize;
