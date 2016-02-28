@@ -13,6 +13,8 @@
 @interface PEPhotosExporter : NSObject
 
 // Export model with selected items to dir
+// Returns NSError if the export was interrupted for any reason;
+// non-fatal errors are received by the callback
 + (NSError*)exportPhotos:(PEAlbumsModel*)model toDir:(NSString*)dir
-                callback:(BOOL (^)(NSString* nextItem, NSUInteger bytesDone, NSUInteger totalBytes))callback;
+                callback:(BOOL (^)(NSString* nextItem, NSUInteger bytesDone, NSUInteger totalBytes, NSError* nonFatalError))callback;
 @end

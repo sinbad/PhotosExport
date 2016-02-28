@@ -15,7 +15,7 @@
 
 
 + (NSError*)exportPhotos:(PEAlbumsModel*)model toDir:(NSString*)dir
-                callback:(BOOL (^)(NSString*, NSUInteger, NSUInteger))callback {
+                callback:(BOOL (^)(NSString*, NSUInteger, NSUInteger, NSError*))callback {
     
     // First add up out what we're going to export for progress
     NSUInteger numPhotos, numVideos, totalBytes = 0;
@@ -49,7 +49,7 @@
 }
 
 + (NSError*)recurseExport:(PEAlbumNode*)node rootDir:(NSString*)rootDir
-                 callback:(BOOL (^)(NSString*, NSUInteger, NSUInteger))callback
+                 callback:(BOOL (^)(NSString*, NSUInteger, NSUInteger, NSError*))callback
                 bytesDone:(NSUInteger)bytesDone totalBytes:(NSUInteger)totalBytes
 {
     // Skip & don't recurse into off nodes
@@ -81,22 +81,16 @@
         // Report item in album format for progress
         NSString* progressItem = [node.canonicalName stringByAppendingPathComponent:filename];
         
-        if (!callback(progressItem, bytesDone, totalBytes))
-            return [NSError errorWithDomain:@"PhotosExport"
-                                       code:99
-                                   userInfo:@{@"message": NSLocalizedString(@"UserCancelledExport", @"")}];
-        
+        NSError* copyError = nil;
         
         if (![fm copyItemAtURL:url toURL:destURL error:&ferr]) {
-            [url stopAccessingSecurityScopedResource];
-            return [NSError errorWithDomain:@"PhotosExport"
-                                       code:4
-                                   userInfo:@{@"message": [NSString stringWithFormat:NSLocalizedString(@"ErrorCopyingFile", @""), url.path, fullpath, ferr.description]}];
-            
+            copyError = [NSError errorWithDomain:@"PhotosExport"
+                                            code:4
+                                        userInfo:@{@"message": [NSString stringWithFormat:NSLocalizedString(@"ErrorCopyingFile", @""), url.path, fullpath, ferr.description]}];
         }
         [url stopAccessingSecurityScopedResource];
         bytesDone += o.fileSize;
-        if (!callback(progressItem, bytesDone, totalBytes))
+        if (!callback(progressItem, bytesDone, totalBytes, copyError))
             return [NSError errorWithDomain:@"PhotosExport"
                                        code:99
                                    userInfo:@{@"message": NSLocalizedString(@"UserCancelledExport", @"")}];
