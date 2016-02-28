@@ -176,13 +176,7 @@
                     alert.alertStyle = NSCriticalAlertStyle;
                     alert.messageText = NSLocalizedString(@"ErrorDuringExport", @"");
                     if ([err.domain isEqualToString:@"PhotosExport"]) {
-                        // This doesn't work; subclass NSError instead
-                        NSString* msgCode = [err.userInfo objectForKey:@"messageCode"];
-                        NSArray* msgArgs = [err.userInfo objectForKey:@"messageArgs"];
-                        if (msgArgs)
-                            alert.informativeText = [NSString stringWithFormat:NSLocalizedString(msgCode, @""), msgArgs];
-                        else
-                            alert.informativeText = NSLocalizedString(msgCode, @"");
+                        alert.informativeText = [err.userInfo objectForKey:@"message"];
                         
                     } else {
                         alert.informativeText = [err description];

@@ -72,7 +72,7 @@
         if (![url startAccessingSecurityScopedResource])
             return [NSError errorWithDomain:@"PhotosExport"
                                        code:2
-                                   userInfo:@{@"messageCode": @"DeniedAccessToPhotosURL"}];
+                                   userInfo:@{@"message": NSLocalizedString(@"DeniedAccessToPhotosURL", @"")}];
         
         NSString* filename = o.name ? o.name : url.lastPathComponent;
         NSString* fullpath = [dir stringByAppendingPathComponent:filename];
@@ -84,15 +84,14 @@
         if (!callback(progressItem, bytesDone, totalBytes))
             return [NSError errorWithDomain:@"PhotosExport"
                                        code:99
-                                   userInfo:@{@"messageCode": @"UserCancelledExport"}];
+                                   userInfo:@{@"message": NSLocalizedString(@"UserCancelledExport", @"")}];
         
         
         if (![fm copyItemAtURL:url toURL:destURL error:&ferr]) {
             [url stopAccessingSecurityScopedResource];
             return [NSError errorWithDomain:@"PhotosExport"
                                        code:4
-                                   userInfo:@{@"messageCode": @"ErrorCopyingFile",
-                                              @"messageArgs": @[url.path, fullpath, ferr.description]}];
+                                   userInfo:@{@"message": [NSString stringWithFormat:NSLocalizedString(@"ErrorCopyingFile", @""), url.path, fullpath, ferr.description]}];
             
         }
         [url stopAccessingSecurityScopedResource];
@@ -100,7 +99,7 @@
         if (!callback(progressItem, bytesDone, totalBytes))
             return [NSError errorWithDomain:@"PhotosExport"
                                        code:99
-                                   userInfo:@{@"messageCode": @"UserCancelledExport"}];
+                                   userInfo:@{@"message": NSLocalizedString(@"UserCancelledExport", @"")}];
     }
     
     for (PEAlbumNode* child in node.children) {
