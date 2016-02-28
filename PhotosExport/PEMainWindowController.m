@@ -174,6 +174,7 @@
     [panel setAllowsMultipleSelection:NO];
     panel.title = NSLocalizedString(@"ExportPanelTitle", @"");
     panel.message = NSLocalizedString(@"ExportPanelMessage", @"");
+    panel.prompt = NSLocalizedString(@"Export", @"");
     NSInteger res = [panel runModal];
     if (res == NSFileHandlingPanelOKButton) {
         // reset

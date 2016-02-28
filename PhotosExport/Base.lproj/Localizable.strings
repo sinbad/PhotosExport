@@ -16,5 +16,6 @@
 "UserCancelledExport" = "Export cancelled by user request.";
 "ExportedWithErrorsTitle" = "Export completed with errors";
 "ExportedWithErrorsMsg" = "Photo export completed but with some errors, please review them in the export progress dialog.";
+"Export" = "Export";
 "Exporting..." = "Exporting...";
 "Done." = "Done.";
