@@ -16,6 +16,7 @@
 		AA19CCAD1C7A0AF20094BD74 /* PEMainWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA19CCAF1C7A0AF20094BD74 /* PEMainWindowController.xib */; };
 		AA19CCB01C7A0AFD0094BD74 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AA19CCB21C7A0AFD0094BD74 /* Localizable.strings */; };
 		AA46860F1C8CA1AE0068063C /* PEAlbumObject.m in Sources */ = {isa = PBXBuildFile; fileRef = AA46860E1C8CA1AE0068063C /* PEAlbumObject.m */; };
+		AA4686111C8CA8300068063C /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = AA4686101C8CA8300068063C /* README.md */; };
 		AACEA2FE1B6F64CB009619A9 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AACEA2FD1B6F64CB009619A9 /* Images.xcassets */; };
 		AACEA3011B6F64CB009619A9 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = AACEA2FF1B6F64CB009619A9 /* MainMenu.xib */; };
 		AACEA3171B6F6544009619A9 /* MediaLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AACEA3161B6F6544009619A9 /* MediaLibrary.framework */; };
@@ -47,6 +48,7 @@
 		AA19CCB11C7A0AFD0094BD74 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		AA46860D1C8CA1AE0068063C /* PEAlbumObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PEAlbumObject.h; sourceTree = "<group>"; };
 		AA46860E1C8CA1AE0068063C /* PEAlbumObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PEAlbumObject.m; sourceTree = "<group>"; };
+		AA4686101C8CA8300068063C /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		AACEA2F61B6F64CB009619A9 /* PhotosExport.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotosExport.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AACEA2FA1B6F64CB009619A9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AACEA2FD1B6F64CB009619A9 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -78,6 +80,7 @@
 		AACEA2ED1B6F64CB009619A9 = {
 			isa = PBXGroup;
 			children = (
+				AA4686101C8CA8300068063C /* README.md */,
 				AACEA2F81B6F64CB009619A9 /* PhotosExport */,
 				AACEA3091B6F64CB009619A9 /* PhotosExportTests */,
 				AACEA2F71B6F64CB009619A9 /* Products */,
@@ -260,6 +263,7 @@
 				AA19CCA21C77813D0094BD74 /* PEAlbumNode.m in Sources */,
 				AA19CC991C7635EC0094BD74 /* PEAppDelegate.m in Sources */,
 				AA19CC9E1C777B6E0094BD74 /* PEMainWindowController.m in Sources */,
+				AA4686111C8CA8300068063C /* README.md in Sources */,
 				AA46860F1C8CA1AE0068063C /* PEAlbumObject.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
