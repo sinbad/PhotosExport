@@ -200,6 +200,7 @@
         // reset
         nonFatalErrorDuringExportCount = 0;
         self.exportMessageList = [NSMutableArray arrayWithObject:NSLocalizedString(@"Exporting...", @"")];
+        [self.exportProgressTable reloadData];
         self.exportProgressAbortHidden = NO;
         self.exportProgressCloseHidden = YES;
         exportCancelRequested = NO;
