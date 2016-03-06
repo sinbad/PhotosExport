@@ -7,6 +7,7 @@
 */
 "DeniedAccessToPhotosURL" = "Denied access to Photos URL (probably by user).";
 "ErrorCopyingFile" = "Error copying %@ to %@: %@";
+"ErrorMissingFile" = "Missing local image: %@/%@: Likely cause is iCloud Photo Library & local images not downloaded";
 "ErrorReplacingFile" = "Error replacing %@ with %@: %@";
 "ExportPanelTitle" = "Export to Directory";
 "ExportPanelMessage" = "Specify the root folder to export photos.";

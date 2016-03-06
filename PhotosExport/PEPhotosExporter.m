@@ -78,7 +78,9 @@
         NSString* fullpath = [dir stringByAppendingPathComponent:filename];
         BOOL copy = YES;
         BOOL overwrite = NO;
+        NSError* copyError = nil;
         
+        // Check for overwrite
         if ([fm fileExistsAtPath:fullpath]) {
             // Default to overwrite (in case we can't get attributes)
             overwrite = YES;
@@ -92,7 +94,18 @@
             }
         }
 
-        NSError* copyError = nil;
+        // Check for missing source
+        if (copy && ![fm fileExistsAtPath:url.path]) {
+            // This can happen if using iCloud Photo Library & we do not have full res versions locally
+            // Doesn't seem to be an API to download right now, Apple hasn't properly exposed
+            // Photos.framework on OS X so [PHImageManager requestImageForAsset] isn't available
+            // PITA Apple! We'll just have to skip
+            copy = NO;
+            copyError = [NSError errorWithDomain:@"PhotosExport"
+                                            code:4
+                                        userInfo:@{@"message": [NSString stringWithFormat:NSLocalizedString(@"ErrorMissingFile", @""), node.canonicalName, filename]}];
+        }
+
         if (copy) {
             NSURL* destURL = [NSURL fileURLWithPath:fullpath];
             
