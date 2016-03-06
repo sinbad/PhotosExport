@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 @import MediaLibrary;
 
+@class PEAlbumObject;
+
 typedef NS_ENUM(NSUInteger, PEAlbumType)
 {
     // A regular album
@@ -40,7 +42,7 @@ typedef NS_ENUM(NSUInteger, PEAlbumType)
 @property (assign, nonatomic) NSUInteger videoCount;
 @property (assign, nonatomic) NSUInteger totalBytes;
 // The actual items contained
-@property (strong, nonatomic) NSMutableArray<MLMediaObject*>* albumContents;
+@property (strong, nonatomic) NSMutableArray<PEAlbumObject*>* albumContents;
 
 - (instancetype)initWithParent:(PEAlbumNode*)parent group:(MLMediaGroup*)group;
 // Asynchronously enumerate the items (photos, videos) in the album

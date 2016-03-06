@@ -10,6 +10,7 @@
 #import "PEPhotosExporter.h"
 #import "PEAlbumsModel.h"
 #import "PEAlbumNode.h"
+#import "PEAlbumObject.h"
 
 @implementation PEPhotosExporter
 
@@ -67,8 +68,8 @@
             return ferr;
         }
     }
-    for (MLMediaObject* o in node.albumContents) {
-        NSURL* url = o.URL;
+    for (PEAlbumObject* o in node.albumContents) {
+        NSURL* url = o.url;
         if (![url startAccessingSecurityScopedResource])
             return [NSError errorWithDomain:@"PhotosExport"
                                        code:2

@@ -8,6 +8,7 @@
 
 @import Cocoa;
 #import "PEAlbumNode.h"
+#import "PEAlbumObject.h"
 
 @implementation PEAlbumNode
 
@@ -64,21 +65,22 @@
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object
                         change:(NSDictionary *)change context:(void *)context {
     // Only used for mediaObjects ready notification
-    for(MLMediaObject* o in self.mediaGroup.mediaObjects)
+    for(MLMediaObject* mediaObj in self.mediaGroup.mediaObjects)
     {
-        switch(o.mediaType) {
-            case MLMediaTypeImage:
+        PEAlbumObject* photoObj = [PEAlbumObject objectWithMediaObject:mediaObj];
+        switch(photoObj.objectType) {
+            case PEObjectTypeImage:
                 self.photoCount++;
                 break;
-            case MLMediaTypeMovie:
+            case PEObjectTypeVideo:
                 self.videoCount++;
                 break;
             default:
                 continue; // should never happen
         }
         [self willChangeValueForKey:@"description"];
-        self.totalBytes += o.fileSize;
-        [self.albumContents addObject:o];
+        self.totalBytes += photoObj.fileSize;
+        [self.albumContents addObject:photoObj];
         [self didChangeValueForKey:@"description"];
         //NSLog(@"%@ (url:%@ )(id:%@)", [self.canonicalName stringByAppendingFormat:@"/%@", o.name], o.URL.path, o.identifier);
     }
