@@ -11,6 +11,8 @@
 #import "PEAlbumNode.h"
 #import "PEPhotosExporter.h"
 
+#define PE_SAVED_SELECTIONS @"savedSelections"
+
 @interface PEMainWindowController () {
     PEAlbumsModel* model;
     NSDictionary<NSString*, NSNumber*>* storedSelections;
@@ -54,10 +56,11 @@
 
 - (NSDictionary<NSString*, NSNumber*>*)defaultSelections {
     if (!storedSelections) {
-        // TODO load from last selection to override
+        storedSelections = [[NSUserDefaults standardUserDefaults] dictionaryForKey:PE_SAVED_SELECTIONS];
+    }
+    if (!storedSelections) {
         storedSelections = @{};
     }
-    
     
     return storedSelections;
 }
@@ -102,10 +105,25 @@
 - (void)saveSelection {
     // Save state for all nodes, including off state
     // nodes for which no state is loaded will be defaulted
-
-    // TODO
-
+    NSMutableDictionary<NSString*, NSNumber*>* d = [NSMutableDictionary dictionaryWithCapacity:storedSelections.count];
+    for (PEAlbumNode* n in model.tree) {
+        [self recurseSaveSelection:n toState:d];
+    }
+    [[NSUserDefaults standardUserDefaults] setObject:d forKey:PE_SAVED_SELECTIONS];
 }
+
+- (void)recurseSaveSelection:(PEAlbumNode*)n toState:(NSMutableDictionary<NSString*, NSNumber*>*)state {
+    
+    // Save on and off state so that only unknown items are defaulted
+    [state setObject:@(n.checkState) forKey:n.canonicalName];
+    
+    for (PEAlbumNode* child in n.children) {
+        [self recurseSaveSelection:child toState:state];
+    }
+    
+}
+
+
 - (void)expandDefaults {
     for (PEAlbumNode* node in model.tree) {
         [self recurseExpandDefaults:node];
@@ -167,6 +185,8 @@
 
 - (IBAction)export:(id)sender
 {
+    [self saveSelection];
+    
     NSOpenPanel* panel = [NSOpenPanel openPanel];
     panel.canCreateDirectories = YES;
     panel.canChooseFiles = NO;
@@ -281,4 +301,11 @@
     // only clickable if export finished with errors
     [self.window endSheet:self.exportProgressWindow returnCode:NSModalResponseOK];
 }
+
+- (void)windowWillClose:(NSNotification *)notification {
+    // Save selection on close too in case changed & not exported
+    [self saveSelection];
+}
+
+
 @end

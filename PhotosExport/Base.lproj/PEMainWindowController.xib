@@ -307,6 +307,9 @@
                     <constraint firstAttribute="trailing" secondItem="7E7-1Z-PuG" secondAttribute="trailing" constant="20" id="yEu-0P-rHc"/>
                 </constraints>
             </view>
+            <connections>
+                <outlet property="delegate" destination="-2" id="kuW-gG-EL4"/>
+            </connections>
             <point key="canvasLocation" x="332" y="769.5"/>
         </window>
     </objects>
