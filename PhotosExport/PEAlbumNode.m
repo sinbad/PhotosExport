@@ -45,7 +45,7 @@
             else
                 self.albumType = PEAlbumTypeAlbum;
         }
-        NSLog(@"PEAlbumNode: %@ (type:%@)", self.name, self.mediaGroup.typeIdentifier);
+        //NSLog(@"PEAlbumNode: %@ (type:%@)", self.name, self.mediaGroup.typeIdentifier);
         
     }
     return self;

@@ -275,6 +275,7 @@
                 msg = [nonFatalError description];
             }
             self.exportMessageList[[self.exportMessageList count]-1] = msg;
+            NSLog(@"%@", msg);
             [self.exportMessageList addObject:NSLocalizedString(@"Exporting...", @"")];
         } else {
             self.exportMessageList[[self.exportMessageList count]-1] = progressItem;

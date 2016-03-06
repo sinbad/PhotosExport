@@ -7,6 +7,7 @@
 */
 "DeniedAccessToPhotosURL" = "Denied access to Photos URL (probably by user).";
 "ErrorCopyingFile" = "Error copying %@ to %@: %@";
+"ErrorReplacingFile" = "Error replacing %@ with %@: %@";
 "ExportPanelTitle" = "Export to Directory";
 "ExportPanelMessage" = "Specify the root folder to export photos.";
 "ErrorDuringExport" = "Error during export";

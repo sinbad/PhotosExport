@@ -76,20 +76,47 @@
         
         NSString* filename = o.name ? o.name : url.lastPathComponent;
         NSString* fullpath = [dir stringByAppendingPathComponent:filename];
-        NSURL* destURL = [NSURL fileURLWithPath:fullpath];
+        BOOL copy = YES;
+        BOOL overwrite = NO;
         
-        // Report item in album format for progress
-        NSString* progressItem = [node.canonicalName stringByAppendingPathComponent:filename];
-        
-        NSError* copyError = nil;
-        
-        if (![fm copyItemAtURL:url toURL:destURL error:&ferr]) {
-            copyError = [NSError errorWithDomain:@"PhotosExport"
-                                            code:4
-                                        userInfo:@{@"message": [NSString stringWithFormat:NSLocalizedString(@"ErrorCopyingFile", @""), url.path, fullpath, ferr.localizedDescription]}];
+        if ([fm fileExistsAtPath:fullpath]) {
+            // Default to overwrite (in case we can't get attributes)
+            overwrite = YES;
+            NSDictionary<NSString*,id>* attr = [fm attributesOfItemAtPath:fullpath error:nil];
+            if (attr) {
+                if (attr.fileSize == o.fileSize) {
+                    // File is fine as it is, no copy needed
+                    copy = NO;
+                    overwrite = NO;
+                }
+            }
         }
+
+        NSError* copyError = nil;
+        if (copy) {
+            NSURL* destURL = [NSURL fileURLWithPath:fullpath];
+            
+            if (overwrite) {
+                if (![fm replaceItemAtURL:destURL withItemAtURL:url backupItemName:nil options:NSFileManagerItemReplacementUsingNewMetadataOnly resultingItemURL:&url error:&ferr]) {
+                    copyError = [NSError errorWithDomain:@"PhotosExport"
+                                                    code:4
+                                                userInfo:@{@"message": [NSString stringWithFormat:NSLocalizedString(@"ErrorReplacingFile", @""), fullpath, url.path, ferr.localizedDescription]}];
+                }
+                
+            } else {
+                if (![fm copyItemAtURL:url toURL:destURL error:&ferr]) {
+                    copyError = [NSError errorWithDomain:@"PhotosExport"
+                                                    code:4
+                                                userInfo:@{@"message": [NSString stringWithFormat:NSLocalizedString(@"ErrorCopyingFile", @""), url.path, fullpath, ferr.localizedDescription]}];
+                }
+                
+            }
+        }
+        
         [url stopAccessingSecurityScopedResource];
         bytesDone += o.fileSize;
+        // Report item in album format for progress
+        NSString* progressItem = [node.canonicalName stringByAppendingPathComponent:filename];
         if (!callback(progressItem, bytesDone, totalBytes, copyError))
             return [NSError errorWithDomain:@"PhotosExport"
                                        code:99
