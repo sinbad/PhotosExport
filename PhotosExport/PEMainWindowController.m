@@ -67,9 +67,19 @@
     // Automatically click again if setting to mixed, don't allow this from user input
     if([b state] == NSMixedState) {
         [[sender selectedCell] performClick:sender];
-        return;
     }
+    [self updateSelectedRowCheckboxState:[b state]];
 }
+
+- (void)updateSelectedRowCheckboxState:(NSUInteger)tostate {
+    NSIndexSet* s = [self.outlineView selectedRowIndexes];
+    [s enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+        PEAlbumNode* n = [self.outlineView itemAtRow:idx];
+        if (n.checkState != tostate)
+            n.checkState = tostate;
+    }];
+}
+
 - (void)saveSelection {
     // Save state for all nodes, including off state
     // nodes for which no state is loaded will be defaulted
