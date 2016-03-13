@@ -21,7 +21,7 @@
 @property (strong, nonatomic) NSMutableArray<PEAlbumNode*>* tree;
 
 - (instancetype)init;
-// Begin the load of albums asynchronously, be sure to listen to notifications
-- (void)beginLoad;
+// Begin the load of albums asynchronously, and default the selection of known canonical nodes as passed in. Be sure to listen to notifications
+- (void)beginLoad:(NSDictionary<NSString*,NSNumber*>*)defaultSelections;
 
 @end

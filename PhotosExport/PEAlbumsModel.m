@@ -9,11 +9,13 @@
 #import "PEAlbumsModel.h"
 #import "PEAlbumNode.h"
 @import MediaLibrary;
+@import Cocoa;
 
 @interface PEAlbumsModel() {
     MLMediaLibrary* mediaLibrary;
     MLMediaSource *mediaSource;
     NSUInteger nodesEnumerating;
+    NSDictionary<NSString*,NSNumber*>* selections;
 }
 @end
 
@@ -30,9 +32,10 @@
     return self;
 }
 
-- (void)beginLoad {
+- (void)beginLoad:(NSDictionary<NSString*,NSNumber*>*)defaultSelections {
     [mediaLibrary addObserver:self forKeyPath:@"mediaSources" options:0 context:(__bridge void *)mediaLibrary];
     self.tree = [NSMutableArray array];
+    selections = defaultSelections;
     nodesEnumerating = 0;
     // This starts async loading
     [mediaLibrary mediaSources];
@@ -65,6 +68,25 @@
 - (void)recurseGroup:(MLMediaGroup*)group {
     [self recurseGroup:group parentNode:nil];
 }
+
+- (void)initSelectionForNode:(PEAlbumNode*)n {
+    NSNumber* saved = [selections objectForKey:n.canonicalName];
+    if (saved) {
+        n.checkState = [saved integerValue];
+    } else {
+        // default by album type; default check proper albums & folders, ignore smart filters
+        switch (n.albumType) {
+            case PEAlbumTypeAlbum:
+            case PEAlbumTypeFolder:
+                n.checkState = NSOnState;
+                break;
+            default:
+                n.checkState = NSOffState;
+                break;
+        }
+    }
+}
+
 - (void)recurseGroup:(MLMediaGroup*)group parentNode:(PEAlbumNode*)parent {
     PEAlbumNode* newNode = nil;
     
@@ -72,6 +94,8 @@
     if (![group.typeIdentifier isEqualToString:@"com.apple.Photos.AlbumsGroup"])
     {
         newNode = [[PEAlbumNode alloc] initWithParent:parent group:group];
+        [self initSelectionForNode:newNode];
+        
         if (!parent)
             [self.tree addObject:newNode];
         else

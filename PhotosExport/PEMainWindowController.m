@@ -39,16 +39,14 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(albumsFinished:) name:PE_NOTIFICATION_ALBUMS_FINISHED object:model];
     
     self.loadingAlbums = YES;
-    [model beginLoad];
+    [model beginLoad:[self defaultSelections]];
 }
 
 - (void)albumsUpdated:(NSNotification*)notif {
-    [self loadOrDefaultSelection];
     [self.outlineView reloadData];
     [self expandDefaults];
 }
 - (void)albumsFinished:(NSNotification*)notif {
-    [self loadOrDefaultSelection];
     [self.outlineView reloadData];
     self.loadingAlbums = NO;
     [self expandDefaults];
@@ -65,35 +63,6 @@
     return storedSelections;
 }
 
-- (void)loadOrDefaultSelection {
-    NSDictionary<NSString*, NSNumber*>* sel = [self defaultSelections];
-    for (PEAlbumNode* n in model.tree) {
-        [self recurseSetSelectionOnNode:n fromState:sel];
-    }
-}
-
-- (void)recurseSetSelectionOnNode:(PEAlbumNode*)n fromState:(NSDictionary<NSString*, NSNumber*>*)sel {
-    
-    NSNumber* saved = [sel objectForKey:n.canonicalName];
-    if (saved) {
-        n.checkState = [saved integerValue];
-    } else {
-        // default by album type; default check proper albums & folders, ignore smart filters
-        switch (n.albumType) {
-            case PEAlbumTypeAlbum:
-            case PEAlbumTypeFolder:
-                n.checkState = NSOnState;
-                break;
-            default:
-                n.checkState = NSOffState;
-                break;
-        }
-    }
-    
-    for (PEAlbumNode* child in n.children) {
-        [self recurseSetSelectionOnNode:child fromState:sel];
-    }
-}
 - (IBAction)checkboxClicked:(id)sender {
     NSButton* b = sender;
     // Automatically click again if setting to mixed, don't allow this from user input
