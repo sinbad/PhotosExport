@@ -49,7 +49,6 @@
 - (void)albumsFinished:(NSNotification*)notif {
     [self.outlineView reloadData];
     self.loadingAlbums = NO;
-    [self expandDefaults];
 }
 
 - (NSDictionary<NSString*, NSNumber*>*)defaultSelections {
@@ -106,6 +105,8 @@
         for (PEAlbumNode* child in n.children) {
             [self recurseExpandDefaults:child];
         }
+    } else {
+        [self.outlineView collapseItem:n collapseChildren:YES];
     }
 }
 - (BOOL)outlineView:(NSOutlineView *)outlineView isItemExpandable:(id)item {
