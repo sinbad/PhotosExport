@@ -86,9 +86,12 @@
         if ([fm fileExistsAtPath:fullpath]) {
             // Default to overwrite (in case we can't get attributes)
             overwrite = YES;
-            NSDictionary<NSString*,id>* attr = [fm attributesOfItemAtPath:fullpath error:nil];
-            if (attr) {
-                if (attr.fileSize == o.fileSize) {
+            NSDictionary<NSString*,id>* destattr = [fm attributesOfItemAtPath:fullpath error:nil];
+            NSDictionary<NSString*,id>* srcattr = [fm attributesOfItemAtPath:url.path error:nil];
+            
+            if (destattr && srcattr) {
+                if (destattr.fileSize == srcattr.fileSize &&
+                    [destattr fileModificationDate] >= [srcattr fileModificationDate]) {
                     // File is fine as it is, no copy needed
                     copy = NO;
                     overwrite = NO;
