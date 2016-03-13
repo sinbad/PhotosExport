@@ -24,8 +24,9 @@
         [self recurseGetSize:n outNumPhotos:&numPhotos outNumVideos:&numVideos outTotalBytes:&totalBytes];
     }
     
+    NSUInteger bytesDone = 0;
     for (PEAlbumNode* n in model.tree) {
-        NSError* err = [self recurseExport:n rootDir:dir callback:callback bytesDone:0 totalBytes:totalBytes];
+        NSError* err = [self recurseExport:n rootDir:dir callback:callback bytesDone:&bytesDone totalBytes:totalBytes];
         if (err)
             return err;
     }
@@ -51,7 +52,7 @@
 
 + (NSError*)recurseExport:(PEAlbumNode*)node rootDir:(NSString*)rootDir
                  callback:(BOOL (^)(NSString*, NSUInteger, NSUInteger, NSError*))callback
-                bytesDone:(NSUInteger)bytesDone totalBytes:(NSUInteger)totalBytes
+                bytesDone:(NSUInteger*)pBytesDone totalBytes:(NSUInteger)totalBytes
 {
     // Skip & don't recurse into off nodes
     if (node.checkState == NSOffState)
@@ -128,17 +129,17 @@
         }
         
         [url stopAccessingSecurityScopedResource];
-        bytesDone += o.fileSize;
+        *pBytesDone += o.fileSize;
         // Report item in album format for progress
         NSString* progressItem = [node.canonicalName stringByAppendingPathComponent:filename];
-        if (!callback(progressItem, bytesDone, totalBytes, copyError))
+        if (!callback(progressItem, *pBytesDone, totalBytes, copyError))
             return [NSError errorWithDomain:@"PhotosExport"
                                        code:99
                                    userInfo:@{@"message": NSLocalizedString(@"UserCancelledExport", @"")}];
     }
     
     for (PEAlbumNode* child in node.children) {
-        NSError* err = [self recurseExport:child rootDir:rootDir callback:callback bytesDone:bytesDone totalBytes:totalBytes];
+        NSError* err = [self recurseExport:child rootDir:rootDir callback:callback bytesDone:pBytesDone totalBytes:totalBytes];
         if (err)
             return err;
     }
