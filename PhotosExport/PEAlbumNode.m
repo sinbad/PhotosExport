@@ -23,14 +23,14 @@
         
         NSDictionary<NSString*, NSNumber*>* typeMap =
         @{
-          @"com.apple.Photos.FacesAlbum" : @(PEAlbumTypeSystemSmart),
-          @"com.apple.Photos.LastImportGroup" : @(PEAlbumTypeSystemSmart),
-          @"com.apple.Photos.FavoritesGroup" : @(PEAlbumTypeSystemSmart),
-          @"com.apple.Photos.FrontCameraGroup" : @(PEAlbumTypeSystemSmart), // Selfies
-          @"com.apple.Photos.PanoramasGroup" : @(PEAlbumTypeSystemSmart),
-          @"com.apple.Photos.VideosGroup" : @(PEAlbumTypeSystemSmart),
-          @"com.apple.Photos.SloMoGroup" : @(PEAlbumTypeSystemSmart),
-          @"com.apple.Photos.BurstGroup" : @(PEAlbumTypeSystemSmart),
+          @"com.apple.Photos.FacesAlbum" : @(PEAlbumTypeFaces),
+          @"com.apple.Photos.LastImportGroup" : @(PEAlbumTypeLastImport),
+          @"com.apple.Photos.FavoritesGroup" : @(PEAlbumTypeFavourites),
+          @"com.apple.Photos.FrontCameraGroup" : @(PEAlbumTypeSelfies),
+          @"com.apple.Photos.PanoramasGroup" : @(PEAlbumTypePanoramas),
+          @"com.apple.Photos.VideosGroup" : @(PEAlbumTypeVideos),
+          @"com.apple.Photos.SloMoGroup" : @(PEAlbumTypeSloMo),
+          @"com.apple.Photos.BurstGroup" : @(PEAlbumTypeBurst),
           @"com.apple.Photos.Folder" : @(PEAlbumTypeFolder),
           @"com.apple.Photos.Album" : @(PEAlbumTypeAlbum),
           @"com.apple.Photos.SmartAlbum" : @(PEAlbumTypeUserSmart),

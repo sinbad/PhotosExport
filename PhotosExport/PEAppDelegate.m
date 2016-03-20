@@ -8,6 +8,7 @@
 
 #import "PEAppDelegate.h"
 #import "PEMainWindowController.h"
+#import "PEAlbumTypeImageTransformer.h"
 
 @interface PEAppDelegate() {
     PEMainWindowController* mainWindowCtrl;
@@ -17,6 +18,8 @@
 @implementation PEAppDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+	[NSValueTransformer setValueTransformer:[[PEAlbumTypeImageTransformer alloc] init] forName:@"AlbumTypeImageTransformer"];
+
     mainWindowCtrl = [[PEMainWindowController alloc] init];
     [mainWindowCtrl window];
 }

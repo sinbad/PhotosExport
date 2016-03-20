@@ -20,8 +20,15 @@ typedef NS_ENUM(NSUInteger, PEAlbumType)
     // Smart Album (user created)
     PEAlbumTypeUserSmart = 2,
     // Faces, Selfies, Last Import etc - all default ignore
-    PEAlbumTypeSystemSmart = 3,
-    
+    PEAlbumTypeFaces = 3,
+	PEAlbumTypeVideos = 4,
+	PEAlbumTypeSelfies = 5,
+	PEAlbumTypeLastImport = 6,
+	PEAlbumTypePanoramas = 7,
+	PEAlbumTypeFavourites = 8,
+	PEAlbumTypeSloMo = 9,
+	PEAlbumTypeBurst = 10,
+	PEAlbumTypeScreenshots = 11
 };
 
 // Notification that item enumeration (beginEnumerateItems) has finished

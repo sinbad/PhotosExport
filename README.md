@@ -10,10 +10,19 @@ This is just something I hacked together in a few hours that I'm publishing for 
 
 ## TODO ##
 
-* Select / deselect all
 * Icons & general prettification
 * Sorting options (currently ordering is identical to Photos)
 * Add option: export originals (currently exports edited versions if present)
 * Add option: skip duplicates (photo in multiple albums) or symlink
 * Expose command line interface for scheduled running
+
+## Credits ##
+
+* Video Camera by Mike Arndt from the Noun Project
+* import by ChangHoon Baek from the Noun Project
+* Heart by Okan Benn from the Noun Project
+* Thunderbolt screen by Samy Menai from the Noun Project
+* timer by useiconic.com from the Noun Project
+* panorama by Francisca Arévalo from the Noun Project
+* Slideshow by Ralf Schmitzer from the Noun Project
 

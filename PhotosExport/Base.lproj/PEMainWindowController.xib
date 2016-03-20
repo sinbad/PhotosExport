@@ -53,7 +53,7 @@
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <textField horizontalHuggingPriority="249" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="lxc-BP-UQb">
-                                                            <rect key="frame" x="20" y="0.0" width="417" height="17"/>
+                                                            <rect key="frame" x="41" y="0.0" width="396" height="17"/>
                                                             <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="H9d-9a-qDe">
                                                                 <font key="font" metaFont="system"/>
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -74,13 +74,31 @@
                                                                 <binding destination="Rdc-3a-582" name="value" keyPath="objectValue.checkState" id="HaX-VJ-kkl"/>
                                                             </connections>
                                                         </button>
+                                                        <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Nwr-Nc-ToI">
+                                                            <rect key="frame" x="23" y="0.0" width="16" height="16"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="16" id="Whw-dw-vMH"/>
+                                                                <constraint firstAttribute="height" constant="16" id="mCe-Yp-ggH"/>
+                                                            </constraints>
+                                                            <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="RbY-BX-r7J"/>
+                                                            <connections>
+                                                                <binding destination="Rdc-3a-582" name="value" keyPath="objectValue" id="a4L-cs-xne">
+                                                                    <dictionary key="options">
+                                                                        <bool key="NSConditionallySetsEnabled" value="NO"/>
+                                                                        <string key="NSValueTransformerName">PEAlbumTypeImageTransformer</string>
+                                                                    </dictionary>
+                                                                </binding>
+                                                            </connections>
+                                                        </imageView>
                                                     </subviews>
                                                     <constraints>
-                                                        <constraint firstItem="lxc-BP-UQb" firstAttribute="leading" secondItem="4sb-7E-qMY" secondAttribute="trailing" constant="3" id="4q7-EH-jZU"/>
+                                                        <constraint firstItem="Nwr-Nc-ToI" firstAttribute="leading" secondItem="4sb-7E-qMY" secondAttribute="trailing" constant="4" id="E4b-Hp-4BN"/>
                                                         <constraint firstItem="4sb-7E-qMY" firstAttribute="centerY" secondItem="lxc-BP-UQb" secondAttribute="centerY" id="V4h-GY-IGf"/>
                                                         <constraint firstAttribute="trailing" secondItem="lxc-BP-UQb" secondAttribute="trailing" constant="5" id="bDx-G7-bKS"/>
+                                                        <constraint firstItem="Nwr-Nc-ToI" firstAttribute="centerY" secondItem="4sb-7E-qMY" secondAttribute="centerY" id="bvI-pg-48F"/>
                                                         <constraint firstItem="lxc-BP-UQb" firstAttribute="top" secondItem="Rdc-3a-582" secondAttribute="top" id="ifb-hM-W0Y"/>
                                                         <constraint firstItem="4sb-7E-qMY" firstAttribute="leading" secondItem="Rdc-3a-582" secondAttribute="leading" constant="5" id="pOf-K1-NZC"/>
+                                                        <constraint firstItem="lxc-BP-UQb" firstAttribute="leading" secondItem="Nwr-Nc-ToI" secondAttribute="trailing" constant="4" id="rwB-AD-NwF"/>
                                                     </constraints>
                                                     <connections>
                                                         <outlet property="textField" destination="lxc-BP-UQb" id="rAS-Gi-h2i"/>
