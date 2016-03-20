@@ -31,6 +31,7 @@
           @"com.apple.Photos.VideosGroup" : @(PEAlbumTypeVideos),
           @"com.apple.Photos.SloMoGroup" : @(PEAlbumTypeSloMo),
           @"com.apple.Photos.BurstGroup" : @(PEAlbumTypeBurst),
+		  @"com.apple.Photos.ScreenshotGroup" : @(PEAlbumTypeScreenshots),
           @"com.apple.Photos.Folder" : @(PEAlbumTypeFolder),
           @"com.apple.Photos.Album" : @(PEAlbumTypeAlbum),
           @"com.apple.Photos.SmartAlbum" : @(PEAlbumTypeUserSmart),
