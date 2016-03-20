@@ -48,6 +48,7 @@ typedef NS_ENUM(NSUInteger, PEAlbumType)
 @property (assign, nonatomic) NSUInteger photoCount;
 @property (assign, nonatomic) NSUInteger videoCount;
 @property (assign, nonatomic) NSUInteger totalBytes;
+@property (readonly, nonatomic) NSString* contentSummary;
 // The actual items contained
 @property (strong, nonatomic) NSMutableArray<PEAlbumObject*>* albumContents;
 

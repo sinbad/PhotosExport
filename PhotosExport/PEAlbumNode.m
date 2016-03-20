@@ -20,7 +20,7 @@
         self.uniqueId = [group.attributes objectForKey:@"identifier"];
         self.canonicalName = parent? [parent.canonicalName stringByAppendingFormat:@"/%@", self.name] : self.name;
         self.children = [NSMutableArray array];
-        
+		
         NSDictionary<NSString*, NSNumber*>* typeMap =
         @{
           @"com.apple.Photos.FacesAlbum" : @(PEAlbumTypeFaces),
@@ -46,6 +46,9 @@
             else
                 self.albumType = PEAlbumTypeAlbum;
         }
+		if (self.albumType != PEAlbumTypeFolder)
+			_contentSummary = @"...";
+
         //NSLog(@"PEAlbumNode: %@ (type:%@)", self.name, self.mediaGroup.typeIdentifier);
         
     }
@@ -64,6 +67,7 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object
                         change:(NSDictionary *)change context:(void *)context {
+	[self willChangeValueForKey:@"description"];
     // Only used for mediaObjects ready notification
     for(MLMediaObject* mediaObj in self.mediaGroup.mediaObjects)
     {
@@ -78,29 +82,38 @@
             default:
                 continue; // should never happen
         }
-        [self willChangeValueForKey:@"description"];
         self.totalBytes += photoObj.fileSize;
         [self.albumContents addObject:photoObj];
-        [self didChangeValueForKey:@"description"];
         //NSLog(@"%@ (url:%@ )(id:%@)", [self.canonicalName stringByAppendingFormat:@"/%@", o.name], o.URL.path, o.identifier);
     }
+	[self updateContentSummary];
+	[self didChangeValueForKey:@"description"];
     [[NSNotificationCenter defaultCenter] postNotificationName:PE_ALBUM_ENUMERATE_ITEMS_FINISHED object:self];
 }
 
 - (NSString *)description {
     NSMutableString* s = [NSMutableString stringWithString:self.name];
-    if (self.photoCount || self.videoCount) {
-        [s appendString:@" ("];
-        if (self.photoCount)
-            [s appendFormat:@"%ld photos", self.photoCount];
-        if (self.videoCount) {
-            if (self.photoCount)
-                [s appendString:@", "];
-            [s appendFormat:@"%ld videos", self.videoCount];
-        }
-        [s appendFormat:@", %@)", [NSByteCountFormatter stringFromByteCount:self.totalBytes countStyle:NSByteCountFormatterCountStyleFile]];
-    }
+	NSString* summ = self.contentSummary;
+	if ([summ length])
+		[s appendFormat:@" (%@)", summ];
     return s;
+}
+
+- (void)updateContentSummary {
+	[self willChangeValueForKey:@"contentSummary"];
+	NSMutableString* s = [NSMutableString string];
+	if (self.photoCount || self.videoCount) {
+		if (self.photoCount)
+			[s appendFormat:@"%ld photos", self.photoCount];
+		if (self.videoCount) {
+			if (self.photoCount)
+				[s appendString:@", "];
+			[s appendFormat:@"%ld videos", self.videoCount];
+		}
+		[s appendFormat:@", %@", [NSByteCountFormatter stringFromByteCount:self.totalBytes countStyle:NSByteCountFormatterCountStyleFile]];
+	}
+	_contentSummary = s;
+	[self didChangeValueForKey:@"contentSummary"];
 }
 
 - (void)checkChildCheckState {

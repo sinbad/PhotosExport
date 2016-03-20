@@ -53,14 +53,25 @@
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <textField horizontalHuggingPriority="249" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="lxc-BP-UQb">
-                                                            <rect key="frame" x="41" y="0.0" width="396" height="17"/>
+                                                            <rect key="frame" x="41" y="0.0" width="97" height="17"/>
                                                             <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="H9d-9a-qDe">
                                                                 <font key="font" metaFont="system"/>
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                             <connections>
-                                                                <binding destination="Rdc-3a-582" name="value" keyPath="objectValue.description" id="dQU-bP-w3c"/>
+                                                                <binding destination="Rdc-3a-582" name="value" keyPath="objectValue.name" id="guU-Iq-JwN"/>
+                                                            </connections>
+                                                        </textField>
+                                                        <textField horizontalHuggingPriority="249" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="zRL-GC-o8i">
+                                                            <rect key="frame" x="337" y="0.0" width="97" height="17"/>
+                                                            <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="right" title="Table View Cell" id="8g4-mk-M8W">
+                                                                <font key="font" metaFont="system"/>
+                                                                <color key="textColor" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                            </textFieldCell>
+                                                            <connections>
+                                                                <binding destination="Rdc-3a-582" name="value" keyPath="objectValue.contentSummary" id="4Fh-cS-xXu"/>
                                                             </connections>
                                                         </textField>
                                                         <button translatesAutoresizingMaskIntoConstraints="NO" id="4sb-7E-qMY">
@@ -92,11 +103,13 @@
                                                         </imageView>
                                                     </subviews>
                                                     <constraints>
+                                                        <constraint firstItem="zRL-GC-o8i" firstAttribute="centerY" secondItem="lxc-BP-UQb" secondAttribute="centerY" id="Byh-OP-T6A"/>
                                                         <constraint firstItem="Nwr-Nc-ToI" firstAttribute="leading" secondItem="4sb-7E-qMY" secondAttribute="trailing" constant="4" id="E4b-Hp-4BN"/>
                                                         <constraint firstItem="4sb-7E-qMY" firstAttribute="centerY" secondItem="lxc-BP-UQb" secondAttribute="centerY" id="V4h-GY-IGf"/>
-                                                        <constraint firstAttribute="trailing" secondItem="lxc-BP-UQb" secondAttribute="trailing" constant="5" id="bDx-G7-bKS"/>
                                                         <constraint firstItem="Nwr-Nc-ToI" firstAttribute="centerY" secondItem="4sb-7E-qMY" secondAttribute="centerY" id="bvI-pg-48F"/>
                                                         <constraint firstItem="lxc-BP-UQb" firstAttribute="top" secondItem="Rdc-3a-582" secondAttribute="top" id="ifb-hM-W0Y"/>
+                                                        <constraint firstItem="zRL-GC-o8i" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="lxc-BP-UQb" secondAttribute="trailing" constant="8" symbolic="YES" id="loj-57-8wn"/>
+                                                        <constraint firstAttribute="trailing" secondItem="zRL-GC-o8i" secondAttribute="trailing" constant="8" id="m9q-JA-0du"/>
                                                         <constraint firstItem="4sb-7E-qMY" firstAttribute="leading" secondItem="Rdc-3a-582" secondAttribute="leading" constant="5" id="pOf-K1-NZC"/>
                                                         <constraint firstItem="lxc-BP-UQb" firstAttribute="leading" secondItem="Nwr-Nc-ToI" secondAttribute="trailing" constant="4" id="rwB-AD-NwF"/>
                                                     </constraints>
