@@ -80,7 +80,7 @@
         NSString* fullpath = [dir stringByAppendingPathComponent:filename];
         BOOL copy = YES;
         BOOL overwrite = NO;
-        NSError* copyError = nil;
+        NSMutableString* copyErrorString = [NSMutableString string];
         
         // Check for overwrite
         if ([fm fileExistsAtPath:fullpath]) {
@@ -106,35 +106,40 @@
             // Photos.framework on OS X so [PHImageManager requestImageForAsset] isn't available
             // PITA Apple! We'll just have to skip
             copy = NO;
-            copyError = [NSError errorWithDomain:@"PhotosExport"
-                                            code:4
-                                        userInfo:@{@"message": [NSString stringWithFormat:NSLocalizedString(@"ErrorMissingFile", @""), node.canonicalName, filename]}];
+			if ([copyErrorString length])
+				[copyErrorString appendString:@"\n"];
+            [copyErrorString appendFormat:NSLocalizedString(@"ErrorMissingFile", @""), node.canonicalName, filename];
         }
 
         if (copy) {
             NSURL* destURL = [NSURL fileURLWithPath:fullpath];
             
             if (overwrite) {
-                if (![fm replaceItemAtURL:destURL withItemAtURL:url backupItemName:nil options:NSFileManagerItemReplacementUsingNewMetadataOnly resultingItemURL:&url error:&ferr]) {
-                    copyError = [NSError errorWithDomain:@"PhotosExport"
-                                                    code:4
-                                                userInfo:@{@"message": [NSString stringWithFormat:NSLocalizedString(@"ErrorReplacingFile", @""), fullpath, url.path, ferr.localizedDescription]}];
+				if (![fm removeItemAtURL:destURL error:&ferr]) {
+					if ([copyErrorString length])
+						[copyErrorString appendString:@"\n"];
+                    [copyErrorString appendFormat:NSLocalizedString(@"ErrorReplacingFile", @""), fullpath, url.path, ferr.localizedDescription];
                 }
-                
-            } else {
-                if (![fm copyItemAtURL:url toURL:destURL error:&ferr]) {
-                    copyError = [NSError errorWithDomain:@"PhotosExport"
-                                                    code:4
-                                                userInfo:@{@"message": [NSString stringWithFormat:NSLocalizedString(@"ErrorCopyingFile", @""), url.path, fullpath, ferr.localizedDescription]}];
-                }
-                
-            }
+			}
+			
+			if (![fm copyItemAtURL:url toURL:destURL error:&ferr]) {
+				if ([copyErrorString length])
+					[copyErrorString appendString:@"\n"];
+				[copyErrorString appendFormat:NSLocalizedString(@"ErrorCopyingFile", @""), url.path, fullpath, ferr.localizedDescription];
+			}
         }
         
         [url stopAccessingSecurityScopedResource];
         *pBytesDone += o.fileSize;
         // Report item in album format for progress
         NSString* progressItem = [node.canonicalName stringByAppendingPathComponent:filename];
+		NSError* copyError = nil;
+		if ([copyErrorString length]) {
+			copyError = [NSError errorWithDomain:@"PhotosExport"
+											code:4
+										userInfo:@{@"message": copyErrorString}];
+			
+		}
         if (!callback(progressItem, *pBytesDone, totalBytes, copyError))
             return [NSError errorWithDomain:@"PhotosExport"
                                        code:99
