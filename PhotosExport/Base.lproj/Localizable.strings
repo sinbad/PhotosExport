@@ -21,3 +21,4 @@
 "Export" = "Export";
 "Exporting..." = "Exporting...";
 "Done." = "Done.";
+"SelectedSummary" = "Selected: %lu photos, %lu videos, %@";

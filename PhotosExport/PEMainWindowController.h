@@ -12,6 +12,7 @@
     
 }
 @property (assign, nonatomic) BOOL loadingAlbums;
+@property (readonly, nonatomic) NSString* selectedSummary;
 @property (weak, nonatomic) IBOutlet NSOutlineView* outlineView;
 @property (weak, nonatomic) IBOutlet NSWindow* exportProgressWindow;
 @property (weak, nonatomic) IBOutlet NSTableView* exportProgressTable;

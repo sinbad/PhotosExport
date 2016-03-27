@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9532"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10116"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="PEMainWindowController">
@@ -16,20 +16,20 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <window title="Export Photos" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" oneShot="NO" releasedWhenClosed="NO" frameAutosaveName="exportWindow" animationBehavior="default" id="F0z-JX-Cv5" userLabel="MainWindow">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
-            <rect key="contentRect" x="508" y="240" width="480" height="429"/>
+            <rect key="contentRect" x="508" y="240" width="480" height="444"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
             <view key="contentView" id="se5-gp-TjO">
-                <rect key="frame" x="0.0" y="0.0" width="480" height="429"/>
+                <rect key="frame" x="0.0" y="0.0" width="480" height="444"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CgM-BA-FWN">
-                        <rect key="frame" x="20" y="59" width="440" height="325"/>
+                        <rect key="frame" x="20" y="74" width="440" height="325"/>
                         <clipView key="contentView" id="cMN-Xl-fGM">
                             <rect key="frame" x="1" y="1" width="438" height="323"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" columnReordering="NO" columnResizing="NO" autosaveColumns="NO" rowSizeStyle="automatic" viewBased="YES" indentationPerLevel="16" autoresizesOutlineColumn="YES" outlineTableColumn="fKH-te-IPB" id="g2H-Hy-qIk">
-                                    <rect key="frame" x="0.0" y="0.0" width="443" height="0.0"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="443" height="323"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -138,7 +138,7 @@
                         </scroller>
                     </scrollView>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2Tx-C0-EkG">
-                        <rect key="frame" x="18" y="392" width="99" height="17"/>
+                        <rect key="frame" x="18" y="407" width="99" height="17"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Photo Albums:" id="Vnv-h0-JaP">
                             <font key="font" metaFont="systemBold"/>
                             <color key="textColor" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
@@ -146,11 +146,22 @@
                         </textFieldCell>
                     </textField>
                     <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="XdK-vz-VUf">
-                        <rect key="frame" x="232" y="393" width="16" height="16"/>
+                        <rect key="frame" x="232" y="408" width="16" height="16"/>
                         <connections>
                             <binding destination="-2" name="animate" keyPath="loadingAlbums" id="xUH-nA-Gfh"/>
                         </connections>
                     </progressIndicator>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OCJ-73-J2b">
+                        <rect key="frame" x="18" y="49" width="444" height="17"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="noO-YA-oLy">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                        <connections>
+                            <binding destination="-2" name="value" keyPath="selectedSummary" id="aeC-O1-AfR"/>
+                        </connections>
+                    </textField>
                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="IsN-5R-lJ4">
                         <rect key="frame" x="374" y="13" width="92" height="32"/>
                         <buttonCell key="cell" type="push" title="Export..." bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="fp5-gf-Vtt">
@@ -172,16 +183,19 @@
                     <constraint firstAttribute="trailing" secondItem="IsN-5R-lJ4" secondAttribute="trailing" constant="20" id="8XQ-uD-Hxg"/>
                     <constraint firstItem="XdK-vz-VUf" firstAttribute="centerX" secondItem="se5-gp-TjO" secondAttribute="centerX" id="J2G-7j-aO9"/>
                     <constraint firstItem="XdK-vz-VUf" firstAttribute="top" secondItem="se5-gp-TjO" secondAttribute="top" constant="20" id="K2n-13-j2u"/>
+                    <constraint firstItem="OCJ-73-J2b" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" constant="20" id="Kjo-h2-F1X"/>
                     <constraint firstItem="CgM-BA-FWN" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" constant="20" id="Ltp-af-rby"/>
                     <constraint firstAttribute="trailing" secondItem="CgM-BA-FWN" secondAttribute="trailing" constant="20" id="OpB-50-nOo"/>
-                    <constraint firstItem="IsN-5R-lJ4" firstAttribute="top" secondItem="CgM-BA-FWN" secondAttribute="bottom" constant="18" id="PhR-Mx-cv1"/>
                     <constraint firstItem="2Tx-C0-EkG" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" constant="20" id="bX8-60-ShX"/>
+                    <constraint firstItem="IsN-5R-lJ4" firstAttribute="top" secondItem="OCJ-73-J2b" secondAttribute="bottom" constant="8" id="c6Y-7I-zjq"/>
                     <constraint firstItem="CgM-BA-FWN" firstAttribute="top" secondItem="2Tx-C0-EkG" secondAttribute="bottom" constant="8" id="dLh-VT-4WY"/>
                     <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="2Tx-C0-EkG" secondAttribute="trailing" constant="20" symbolic="YES" id="pUZ-z2-vaF"/>
                     <constraint firstItem="2Tx-C0-EkG" firstAttribute="top" secondItem="se5-gp-TjO" secondAttribute="top" constant="20" id="rHJ-M9-Kd7"/>
+                    <constraint firstAttribute="trailing" secondItem="OCJ-73-J2b" secondAttribute="trailing" constant="20" symbolic="YES" id="url-f3-Uz0"/>
+                    <constraint firstItem="OCJ-73-J2b" firstAttribute="top" secondItem="CgM-BA-FWN" secondAttribute="bottom" constant="8" id="xoW-QK-mcB"/>
                 </constraints>
             </view>
-            <point key="canvasLocation" x="310" y="296.5"/>
+            <point key="canvasLocation" x="310" y="304"/>
         </window>
         <userDefaultsController representsSharedInstance="YES" id="rIs-jw-eET"/>
         <window title="Export In Progress" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="yla-dR-vtw" userLabel="ProgressWindow">

@@ -34,7 +34,8 @@
     [super windowDidLoad];
 
     model = [[PEAlbumsModel alloc] init];
-    
+	[self updateSelectedSummary];
+	
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(albumsUpdated:) name:PE_NOTIFICATION_ALBUMS_PROGRESS object:model];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(albumsFinished:) name:PE_NOTIFICATION_ALBUMS_FINISHED object:model];
     
@@ -45,10 +46,12 @@
 - (void)albumsUpdated:(NSNotification*)notif {
     [self.outlineView reloadData];
     [self expandDefaults];
+	[self updateSelectedSummary];
 }
 - (void)albumsFinished:(NSNotification*)notif {
     [self.outlineView reloadData];
     self.loadingAlbums = NO;
+	[self updateSelectedSummary];
 }
 
 - (NSDictionary<NSString*, NSNumber*>*)defaultSelections {
@@ -67,8 +70,10 @@
     // Automatically click again if setting to mixed, don't allow this from user input
     if([b state] == NSMixedState) {
         [[sender selectedCell] performClick:sender];
+		return;
     }
     [self updateSelectedRowCheckboxState:[b state]];
+	[self updateSelectedSummary];
 }
 
 - (void)updateSelectedRowCheckboxState:(NSUInteger)tostate {
@@ -78,6 +83,32 @@
         if (n.checkState != tostate)
             n.checkState = tostate;
     }];
+}
+
+- (void)updateSelectedSummary {
+	[self willChangeValueForKey:@"selectedSummary"];
+	__block NSUInteger photoCount = 0, videoCount = 0, totalBytes = 0;
+	for (PEAlbumNode* n in model.tree) {
+		[self recurseSelected:n callback:^(PEAlbumNode* selNode) {
+			if (selNode.albumType != PEAlbumTypeFolder) {
+				photoCount += selNode.photoCount;
+				videoCount += selNode.videoCount;
+				totalBytes += selNode.totalBytes;
+			}
+		}];
+	}
+	_selectedSummary = [NSString stringWithFormat:NSLocalizedString(@"SelectedSummary", @""), photoCount, videoCount, [NSByteCountFormatter stringFromByteCount:totalBytes countStyle:NSByteCountFormatterCountStyleFile]];
+	[self didChangeValueForKey:@"selectedSummary"];
+}
+
+- (void)recurseSelected:(PEAlbumNode*)n callback:(void (^)(PEAlbumNode*))callback {
+	
+	if (n.checkState != NSOffState) {
+		callback(n);
+		for (PEAlbumNode* child in n.children) {
+			[self recurseSelected:child callback:callback];
+		}
+	}
 }
 
 - (void)saveSelection {
