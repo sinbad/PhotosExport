@@ -57,6 +57,10 @@
     // Skip & don't recurse into off nodes
     if (node.checkState == NSOffState)
         return nil;
+	
+	// Keep a map of files we've already exported into this folder, possible user may name
+	// two files the same thing and we don't want to overwrite
+	NSMutableSet* exported = [NSMutableSet setWithCapacity:[node.albumContents count]];
     
     // Create folder if doesn't exist
     NSFileManager* fm = [NSFileManager defaultManager];
@@ -84,6 +88,17 @@
 				filename = [filename stringByAppendingPathExtension:[url pathExtension]];
 			}
 		}
+		
+		// Make sure we don't overwrite 2 different items with same name
+		// Case insensitive test to be sure
+		NSString* origfilenamebase = [filename stringByDeletingPathExtension];
+		unsigned long suffix = 1;
+		while ([exported containsObject:[filename lowercaseString]]) {
+			filename = [[origfilenamebase stringByAppendingFormat:@"_%lu", suffix++] stringByAppendingPathExtension:[filename pathExtension]];
+		}
+		[exported addObject:[filename lowercaseString]];
+		
+		
         NSString* fullpath = [dir stringByAppendingPathComponent:filename];
         BOOL copy = YES;
         BOOL overwrite = NO;
@@ -104,6 +119,11 @@
                     overwrite = NO;
                 }
             }
+			
+			if (overwrite) {
+				NSLog(@"Overwriting %@ with %@ - DEST sz:%llu date:%@ SRC sz:%llu date:%@",
+					  fullpath, url.path, destattr.fileSize, destattr.fileModificationDate, srcattr.fileSize, srcattr.fileModificationDate);
+			}
         }
 
         // Check for missing source
