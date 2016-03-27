@@ -72,17 +72,25 @@
         [[sender selectedCell] performClick:sender];
 		return;
     }
-    [self updateSelectedRowCheckboxState:[b state]];
+	
+	NSRect brect = [b frame];
+	NSPoint bpoint = NSMakePoint(NSMinX(brect), NSMinY(brect));
+	NSPoint tpoint = [self.outlineView convertPoint:bpoint fromView:b];
+	NSInteger r = [self.outlineView rowAtPoint:tpoint];
+	
+	[self updateSelectedRowCheckboxState:[b state] clickedRow:r];
 	[self updateSelectedSummary];
 }
 
-- (void)updateSelectedRowCheckboxState:(NSUInteger)tostate {
+- (void)updateSelectedRowCheckboxState:(NSUInteger)tostate clickedRow:(NSInteger)clickedRow {
     NSIndexSet* s = [self.outlineView selectedRowIndexes];
-    [s enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
-        PEAlbumNode* n = [self.outlineView itemAtRow:idx];
-        if (n.checkState != tostate)
-            n.checkState = tostate;
-    }];
+	if ([s containsIndex:clickedRow]) {
+		[s enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+			PEAlbumNode* n = [self.outlineView itemAtRow:idx];
+			if (n.checkState != tostate)
+				n.checkState = tostate;
+		}];
+	}
 }
 
 - (void)updateSelectedSummary {
