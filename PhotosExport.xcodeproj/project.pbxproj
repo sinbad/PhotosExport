@@ -16,7 +16,6 @@
 		AA19CCAD1C7A0AF20094BD74 /* PEMainWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AA19CCAF1C7A0AF20094BD74 /* PEMainWindowController.xib */; };
 		AA19CCB01C7A0AFD0094BD74 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AA19CCB21C7A0AFD0094BD74 /* Localizable.strings */; };
 		AA46860F1C8CA1AE0068063C /* PEAlbumObject.m in Sources */ = {isa = PBXBuildFile; fileRef = AA46860E1C8CA1AE0068063C /* PEAlbumObject.m */; };
-		AA4686111C8CA8300068063C /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = AA4686101C8CA8300068063C /* README.md */; };
 		AA6C3E4E1C9EF1F8003B71BE /* PEAlbumTypeImageTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = AA6C3E4D1C9EF1F8003B71BE /* PEAlbumTypeImageTransformer.m */; };
 		AACEA2FE1B6F64CB009619A9 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AACEA2FD1B6F64CB009619A9 /* Images.xcassets */; };
 		AACEA3011B6F64CB009619A9 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = AACEA2FF1B6F64CB009619A9 /* MainMenu.xib */; };
@@ -269,7 +268,6 @@
 				AA19CC991C7635EC0094BD74 /* PEAppDelegate.m in Sources */,
 				AA6C3E4E1C9EF1F8003B71BE /* PEAlbumTypeImageTransformer.m in Sources */,
 				AA19CC9E1C777B6E0094BD74 /* PEMainWindowController.m in Sources */,
-				AA4686111C8CA8300068063C /* README.md in Sources */,
 				AA46860F1C8CA1AE0068063C /* PEAlbumObject.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
