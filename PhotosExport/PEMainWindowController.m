@@ -184,6 +184,26 @@
     return item;
 }
 
+-(BOOL)outlineView:(NSOutlineView*)outlineView keyDown:(NSEvent*)e
+{
+	// toggle checkbox on space
+	if ([e.characters characterAtIndex:0] == ' ')
+	{
+		NSIndexSet* s = [self.outlineView selectedRowIndexes];
+		// Change all to the opposite of the first item
+		PEAlbumNode* first = [self.outlineView itemAtRow:[s firstIndex]];
+		NSInteger newState = first.checkState == NSOnState? NSOffState : NSOnState;
+		[s enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+			PEAlbumNode* n = [self.outlineView itemAtRow:idx];
+			if (n.checkState != newState)
+				n.checkState = newState;
+		}];
+		[self updateSelectedSummary];
+	}
+	return NO; // continue to chain
+	
+}
+
 - (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
     if (tableView == self.exportProgressTable && row <= [self.exportMessageList count]) {
         return self.exportMessageList[row];
