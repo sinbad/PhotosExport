@@ -76,7 +76,14 @@
                                        code:2
                                    userInfo:@{@"message": NSLocalizedString(@"DeniedAccessToPhotosURL", @"")}];
         
-        NSString* filename = o.name ? o.name : url.lastPathComponent;
+        NSString* filename = url.lastPathComponent;
+		// Use name if present but make sure we append extension
+		if (o.name) {
+			filename = o.name;
+			if ([[filename pathExtension] compare:[url pathExtension] options:NSCaseInsensitiveSearch] != NSOrderedSame) {
+				filename = [filename stringByAppendingPathExtension:[url pathExtension]];
+			}
+		}
         NSString* fullpath = [dir stringByAppendingPathComponent:filename];
         BOOL copy = YES;
         BOOL overwrite = NO;
