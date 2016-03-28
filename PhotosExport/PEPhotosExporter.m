@@ -90,13 +90,18 @@
         
         NSString* filename = url.lastPathComponent;
 		// Use name if present but make sure we append extension
-		if (o.name) {
+		if ([o.name length]) {
 			filename = o.name;
 			if ([[filename pathExtension] compare:[url pathExtension] options:NSCaseInsensitiveSearch] != NSOrderedSame) {
 				filename = [filename stringByAppendingPathExtension:[url pathExtension]];
 			}
 		}
 		
+		if (!filename) {
+			NSLog(@"Found nil url for object in album %@, skipping", node.canonicalName);
+			continue;
+		}
+			
 		// Make sure we don't overwrite 2 different items with same name
 		// Case insensitive test to be sure
 		NSString* origfilenamebase = [filename stringByDeletingPathExtension];
