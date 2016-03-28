@@ -28,7 +28,8 @@ typedef NS_ENUM(NSUInteger, PEAlbumType)
 	PEAlbumTypeFavourites = 8,
 	PEAlbumTypeSloMo = 9,
 	PEAlbumTypeBurst = 10,
-	PEAlbumTypeScreenshots = 11
+	PEAlbumTypeScreenshots = 11,
+	PEAlbumTypeAllPhotos = 99
 };
 
 // Notification that item enumeration (beginEnumerateItems) has finished

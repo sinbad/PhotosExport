@@ -22,3 +22,7 @@
 "Exporting..." = "Exporting...";
 "Done." = "Done.";
 "SelectedSummary" = "Selected: %lu photos, %lu videos, %@";
+"ExportingAllPhotosAndOthersTitle" = "Duplicate Items In Export";
+"ExportingAllPhotosAndOthersMsg" = "You have selected 'All Photos' and some other albums, this will export the same photos in both folders, is that what you want?";
+"ContinueWithDuplicates" = "Export Anyway";
+"Cancel" = "Cancel";

@@ -23,6 +23,7 @@
 		
         NSDictionary<NSString*, NSNumber*>* typeMap =
         @{
+		  @"com.apple.Photos.AllPhotosAlbum" : @(PEAlbumTypeAllPhotos),
           @"com.apple.Photos.FacesAlbum" : @(PEAlbumTypeFaces),
           @"com.apple.Photos.LastImportGroup" : @(PEAlbumTypeLastImport),
           @"com.apple.Photos.FavoritesGroup" : @(PEAlbumTypeFavourites),

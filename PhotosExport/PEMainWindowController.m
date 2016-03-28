@@ -222,10 +222,37 @@
     return 17;
 }
 
+- (BOOL)checkDuplications {
+	
+	BOOL exportingAllPhotos = NO;
+	BOOL exportingOthers = NO;
+	for (PEAlbumNode* n in model.tree) {
+		if (n.albumType == PEAlbumTypeAllPhotos) {
+			if (n.checkState == NSOnState)
+				exportingAllPhotos = YES;
+		} else if (n.checkState != NSOffState) {
+			exportingOthers = YES;
+		}
+	}
+	if (exportingAllPhotos && exportingOthers) {
+		NSAlert* alert = [[NSAlert alloc] init];
+		alert.alertStyle = NSInformationalAlertStyle;
+		alert.messageText = NSLocalizedString(@"ExportingAllPhotosAndOthersTitle", @"");
+		alert.informativeText = NSLocalizedString(@"ExportingAllPhotosAndOthersMsg", @"");
+		[alert addButtonWithTitle:NSLocalizedString(@"ContinueWithDuplicates", @"")];
+		[alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"")];
+		return [alert runModal] == NSAlertFirstButtonReturn;
+	}
+	return YES;
+}
+
 - (IBAction)export:(id)sender
 {
-    [self saveSelection];
-    
+	if (![self checkDuplications])
+		return;
+
+	[self saveSelection];
+	
     NSOpenPanel* panel = [NSOpenPanel openPanel];
     panel.canCreateDirectories = YES;
     panel.canChooseFiles = NO;
