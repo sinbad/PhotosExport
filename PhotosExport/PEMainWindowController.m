@@ -12,6 +12,7 @@
 #import "PEPhotosExporter.h"
 
 #define PE_SAVED_SELECTIONS @"savedSelections"
+#define PE_SAVED_EXPORTFOLDER @"savedExportFolder"
 
 @interface PEMainWindowController () {
     PEAlbumsModel* model;
@@ -253,6 +254,7 @@
 
 	[self saveSelection];
 	
+	NSString* prevFolder = [[NSUserDefaults standardUserDefaults] stringForKey:PE_SAVED_EXPORTFOLDER];
     NSOpenPanel* panel = [NSOpenPanel openPanel];
     panel.canCreateDirectories = YES;
     panel.canChooseFiles = NO;
@@ -261,6 +263,9 @@
     panel.title = NSLocalizedString(@"ExportPanelTitle", @"");
     panel.message = NSLocalizedString(@"ExportPanelMessage", @"");
     panel.prompt = NSLocalizedString(@"Export", @"");
+	if ([prevFolder length])
+		panel.directoryURL = [NSURL fileURLWithPath:prevFolder];
+	
     NSInteger res = [panel runModal];
     if (res == NSFileHandlingPanelOKButton) {
         // reset
@@ -274,7 +279,8 @@
         [self.window beginSheet:self.exportProgressWindow completionHandler:^(NSModalResponse returnCode) {
             [self.exportProgressWindow orderOut:self];
         }];
-        
+		
+		[[NSUserDefaults standardUserDefaults] setValue:panel.directoryURL.path forKey:PE_SAVED_EXPORTFOLDER];
         // export in a background thread
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             NSError* err = [PEPhotosExporter exportPhotos:model toDir:panel.directoryURL.path callback:^BOOL(NSString *nextItem, NSUInteger bytesDone, NSUInteger totalBytes, NSError* nonFatalError) {
