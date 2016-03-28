@@ -26,7 +26,7 @@
     
     NSUInteger bytesDone = 0;
     for (PEAlbumNode* n in model.tree) {
-        NSError* err = [self recurseExport:n rootDir:dir callback:callback bytesDone:&bytesDone totalBytes:totalBytes];
+        NSError* err = [self recurseExport:n parentDir:dir callback:callback bytesDone:&bytesDone totalBytes:totalBytes];
         if (err)
             return err;
     }
@@ -50,7 +50,14 @@
     
 }
 
-+ (NSError*)recurseExport:(PEAlbumNode*)node rootDir:(NSString*)rootDir
++ (NSString*)sanitiseFileOrDir:(NSString*)f {
+	
+	// turn invalid path characters into '_'
+	NSCharacterSet* illegalFileNameCharacters = [NSCharacterSet characterSetWithCharactersInString:@"/\\?%*|\"<>:"];
+	return [[f componentsSeparatedByCharactersInSet:illegalFileNameCharacters] componentsJoinedByString:@"_"];
+}
+
++ (NSError*)recurseExport:(PEAlbumNode*)node parentDir:(NSString*)parentDir
                  callback:(BOOL (^)(NSString*, NSUInteger, NSUInteger, NSError*))callback
                 bytesDone:(NSUInteger*)pBytesDone totalBytes:(NSUInteger)totalBytes
 {
@@ -64,7 +71,8 @@
     
     // Create folder if doesn't exist
     NSFileManager* fm = [NSFileManager defaultManager];
-    NSString* dir = [rootDir stringByAppendingPathComponent:node.canonicalName];
+	NSString* subdir = [self sanitiseFileOrDir:node.name];
+    NSString* dir = [parentDir stringByAppendingPathComponent:subdir];
     BOOL isDir = NO;
     NSError* ferr = nil;
     if (!([fm fileExistsAtPath:dir isDirectory:&isDir] && isDir)) {
@@ -97,6 +105,9 @@
 			filename = [[origfilenamebase stringByAppendingFormat:@"_%lu", suffix++] stringByAppendingPathExtension:[filename pathExtension]];
 		}
 		[exported addObject:[filename lowercaseString]];
+		
+		// Sanitise filename before export
+		filename = [self sanitiseFileOrDir:filename];
 		
 		
         NSString* fullpath = [dir stringByAppendingPathComponent:filename];
@@ -174,7 +185,7 @@
     }
     
     for (PEAlbumNode* child in node.children) {
-        NSError* err = [self recurseExport:child rootDir:rootDir callback:callback bytesDone:pBytesDone totalBytes:totalBytes];
+        NSError* err = [self recurseExport:child parentDir:dir callback:callback bytesDone:pBytesDone totalBytes:totalBytes];
         if (err)
             return err;
     }
