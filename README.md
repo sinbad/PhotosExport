@@ -10,7 +10,7 @@ This is just something I hacked together in a few hours that I'm publishing for 
 
 ## TODO ##
 
-* Icons & general prettification
+* Handle edge cases like Photos being edited during export more gracefully
 * Sorting options (currently ordering is identical to Photos)
 * Add option: export originals (currently exports edited versions if present)
 * Add option: skip duplicates (photo in multiple albums) or symlink
