@@ -22,8 +22,7 @@
           <h2 id="project_tagline">Export albums from Photos.app to a directory in bulk</h2>
 
             <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/sinbad/PhotosExport/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/sinbad/PhotosExport/tarball/master">Download this project as a tar.gz file</a>
+              <a class="zip_download_link" href="https://github.com/sinbad/PhotosExport/releases/download/0.3/PhotosExport_0.3.zip">Download</a>
             </section>
         </header>
     </div>
@@ -34,20 +33,41 @@
         <h1>
 <a id="photosexport" class="anchor" href="#photosexport" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>PhotosExport</h1>
 
-<p>PhotosExport bulk exports your Photos.app data to any folder you choose, for easy backup, sharing or migration. While using iCloud Photo Library is fine, sometimes it's nice just to be able to export a folder full of photos &amp; videos which is completely platform-agnostic, yet still respects the albums, folders and titles you've defined inside Photos.app.</p>
+<p>PhotosExport bulk exports your Photos.app data to any folder you choose, for easy backup, sharing or migration.</p>
+
+<p>While using iCloud Photo Library is fine, sometimes it's nice just to be able to export a folder full of photos &amp; videos which is completely platform-agnostic, yet still respects the albums, folders and titles you've defined inside Photos.app.</p>
 
 <p>PhotosExport presents you with your albums in the same structure you see them in Photos.app, letting you choose which ones to export.</p>
 
-<p><img src="images/screenshot.png" alt="Screenshot"></p>
+<p align="center"><img src="images/screenshot.png" alt="Screenshot" width="400" height="494"></p>
 
-<blockquote>
-<p>I used to use PhoShare to do this back in the iPhoto days, but not only was it a little fiddly and a bit long in the tooth, and didn't support Photos.app. I really liked being able to dump my photos &amp; videos on a NAS for backup without needing all the Mac-specific metadata to support it, so I wrote a new tool which I can use in future.</p>
+<h2>Oh hey, that's like PhoShare right?</h2>
+<p>Yep, I was a big user of <a href="https://sites.google.com/site/phosharedoc/">PhoShare</a> to bulk export/back up my iPhoto data, but not only was it a little fiddly and a bit long in the tooth, it doesn't support Photos.app and has basically been abandoned. Personally I really like being able to dump my photos &amp; videos on a NAS for backup / posterity without it being dependent on the Mac-specific metadata, so I wrote a new tool.</p>
 </blockquote>
+
+<h2>Features</h2>
+<p>It behaves mostly as you'd expect (hopefully):
+<ul>
+  <li>Supports photos and videos</li>
+  <li>Folders and album become directories</li>
+  <li>Item titles are used as file names if supplied, if not the original file name is used</li>
+  <li>Automatically detects duplication of file names during export &amp; appends _1, _2 etc to make unique</li>
+  <li>Checks file sizes and modification times to avoid exporting content that already exists, so incremental exports work</li>
+  <li>Remembers what you selected across restarts</li>
+  <li>New albums not seen before are defaulted to being exported, system-generated ones like Faces, Slo-Mo are not</li>
+  <li>Exports edited versions as a preference and originals otherwise</li>
+  <li>Multi-select rows &amp; toggle with either mouse or Spacebar</li>
+</ul>
+</p>
 
 <h2>
 <a id="no-warranty" class="anchor" href="#no-warranty" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>NO WARRANTY</h2>
 
 <p>This is just something I hacked together in a few hours that I'm publishing for free. Use it at your own risk, and don't complain to me if it misbehaves.  I'll probably keep improving it since I need it myself, but I can't promise anything. I also can't promise that it won't have horrid bugs that lead to it filling up your hard drive or eloping with your significant other. </p>
+
+<h2>Download</h2>
+
+<span class="downloadtext"><a href="https://github.com/sinbad/PhotosExport/releases/download/0.3/PhotosExport_0.3.zip">PhotosExport 0.3</a></span>
 
 <h2>
 <a id="todo" class="anchor" href="#todo" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>TODO</h2>
@@ -59,8 +79,7 @@
 <li>Expose command line interface for scheduled running</li>
 </ul>
 
-<h2>
-<a id="image-credits" class="anchor" href="#image-credits" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Image Credits</h2>
+<h2>Image Credits</h2>
 
 <ul>
 <li>Video Camera by Mike Arndt from the Noun Project</li>
